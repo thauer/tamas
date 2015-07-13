@@ -1,0 +1,5 @@
+---
+# file: roles/caffe/vars/main.yml
+
+caffe_parent: /home/ubuntu
+caffe_dir: /home/ubuntu/caffe

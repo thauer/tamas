@@ -1,0 +1,56 @@
+---
+# file: roles/caffe/tasks/caffe.yml
+
+- name: General dependencies
+  apt: name={{ item }} update_cache=yes cache_valid_time=3600
+  with_items:
+    - unzip 
+    - libjpeg-dev
+
+- name: Caffe general dependencies
+  apt: name={{ item }}
+  with_items:
+    - libprotobuf-dev
+    - libleveldb-dev
+    - libsnappy-dev
+    - libopencv-dev
+    - libhdf5-serial-dev
+
+- name: Caffe general dependencies - boost
+  apt: name=libboost-all-dev install_recommends=no
+
+- name: Caffe dependencies - BLAS
+  apt: name=libatlas-base-dev
+
+- name: Caffee remaining dependencies
+  apt: name={{ item }}
+  with_items:
+    - libgflags-dev
+    - libgoogle-glog-dev
+    - liblmdb-dev
+    - protobuf-compiler
+
+- name: fetch Caffe
+  get_url: dest=/tmp/master.zip url=https://github.com/BVLC/caffe/archive/master.zip
+
+- name: unpack Caffe
+  unarchive: src=/tmp/master.zip dest={{ caffe_parent }} copy=no
+
+- name: rename to caffe
+  command: creates="{{ caffe_dir }}" 
+    removes="{{ caffe_parent }}/caffe-master" mv {{ caffe_parent }}/caffe-master {{ caffe_dir }}
+
+- name: create config out of config.example
+  command: cp Makefile.config.example Makefile.config chdir={{ caffe_dir }}
+    creates={{ caffe_dir }}/Makefile.config
+
+- name: Makefile fix - CPU_ONLY
+  lineinfile: dest={{ caffe_dir }}/Makefile.config regexp="CPU_ONLY := 1"
+    line="CPU_ONLY := 1"
+
+- name: Makefile fix - INCLUDE_DIRS
+  lineinfile: dest={{ caffe_dir }}/Makefile.config regexp="^INCLUDE_DIRS :="
+    line="INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/include /usr/include/hdf5/serial/ /usr/local/lib/python2.7/dist-packages/numpy/core/include/"
+
+- name: make caffe
+  command: make all chdir={{ caffe_dir }}

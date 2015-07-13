@@ -1,0 +1,89 @@
+---
+# file: roles/ipython/tasks/main.yml
+
+- name: General dependencies
+  apt: name={{ item }}
+  with_items:
+    - unzip 
+    - python-dev
+    - python-virtualenv
+    - python-pip
+
+- name: IPython and notebook dependencies
+  pip: name={{ item }}
+  with_items:
+    - ipython
+    - "pyzmq>=13"
+    - jinja2
+    - tornado
+    - jsonschema
+
+- name: Configure IPython
+  sudo: no
+  command: ipython profile create
+
+- name: IPython config
+  sudo: no
+  lineinfile: dest={{ notebook_config }}
+    regexp="c.NotebookApp.open_browser"
+    line="c.NotebookApp.open_browser = False"
+
+- name: Create IPython notebooks notebooks dir
+  sudo: no
+  file: path=/home/ubuntu/ipython_notebooks state=directory
+
+- name: IPython notebooks
+  sudo: no
+  lineinfile: dest={{ notebook_config }}
+    regexp="c.NotebookApp.notebook_dir"
+    line="c.NotebookApp.notebook_dir = '/home/ubuntu/ipython_notebooks'"
+
+- name: IPython config
+  sudo: no
+  lineinfile: dest={{ notebook_config }}
+    regexp="c.NotebookApp.password"
+    line="c.NotebookApp.password = u'sha1:f5352e7b4574:6a9c69475a7c43687e006ebfbf5afb3467a74c39'"
+
+- name: IPython config
+  sudo: no
+  lineinfile: dest={{ notebook_config }}
+    regexp="c.NotebookApp.port"
+    line="c.NotebookApp.port = 8888"
+
+- name: Install supervisor
+  apt: name=supervisor
+
+- name: Make sure that supervisor is running
+  service: name=supervisor state=started
+
+- name: Install supervisor start script
+  copy: src=ipython_notebook.conf dest=/etc/supervisor/conf.d/ mode=0755
+
+- name: Add supervisor group
+  supervisorctl: name=ipython_notebook state=present
+
+- name: Make sure that ipython_notebook is started
+  supervisorctl: name=ipython_notebook state=started
+
+- name: Ensures nginx is installed
+  apt: name=nginx
+
+- name: Ensures sure nginx is running
+  service: name=nginx state=started
+
+- name: Disables the default host
+  file: path=/etc/nginx/sites-enabled/default state=absent
+  register: ngconf1
+
+- name: Copies the host configuration 'mysite'
+  template: src=dream.conf dest=/etc/nginx/sites-available/
+  register: ngconf2
+
+- name: Enables the virtual host 'dream.conf'
+  file: path=/etc/nginx/sites-enabled/dream.conf state=link 
+    src=../sites-available/dream.conf
+  register: ngconf3
+
+- name: Restarts ngingx
+  service: name=nginx state=restarted
+  when: ngconf1.changed or ngconf2.changed or ngconf3.changed

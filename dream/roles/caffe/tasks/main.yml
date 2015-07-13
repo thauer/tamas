@@ -1,0 +1,5 @@
+---
+# file: roles/caffe/tasks/main.yml
+
+- include: caffe.yml
+- include: python.yml

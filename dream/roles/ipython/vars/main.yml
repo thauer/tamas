@@ -1,0 +1,5 @@
+---
+# file: roles/ipython/vars/main.yml
+
+notebook_configdir: /home/ubuntu/.ipython/profile_default
+notebook_config: "{{ notebook_configdir }}/ipython_notebook_config.py"
