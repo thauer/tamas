@@ -3,20 +3,11 @@
 
 # Gather facts
 - hosts: all
+  tags: verify
   tasks:
     - setup:
 
-# - hosts: dream
-#   tags: cuda
-#   sudo: yes
-#   tasks:
-#     - name: Get package from nvidia
-#       get_url: dest=/tmp/cuda.deb url=http://developer.download.nvidia.com/compute/cuda/7_0/Prod/local_installers/rpmdeb/cuda-repo-ubuntu1404-7-0-local_7.0-28_amd64.deb
-
-#     - name: Install package
-#       apt: deb=/tmp/cuda.deb
-
-- hosts: dream
+- hosts: dream-DISABLED
   tags: caffe
   sudo: yes
   vars:
@@ -104,10 +95,8 @@
         - "six>=1.1.0"
 
     - name: Python Caffe dependencies 
-      pip: requirements=/home/ubuntu/requirements.txt
-
-    - name: Python Caffe dependencies 
       pip: requirements={{ caffe_dir }}/python/requirements.txt
+      when: False
 
     - name: make pycaffe
       command: make pycaffe chdir={{ caffe_dir }}
@@ -118,12 +107,24 @@
     - name: fetch model
       get_url: dest={{ caffe_dir }}/models/bvlc_googlenet
         url=http://dl.caffe.berkeleyvision.org/bvlc_googlenet.caffemodel
+        
+- hosts: dream
+  tags: googlemodel
+  sudo: yes
+  vars:
+    caffe_dir: /home/ubuntu/caffe
+  tasks: 
+    - name: fetch model
+      get_url: dest={{ caffe_dir }}/models/bvlc_googlenet
+        url=http://dl.caffe.berkeleyvision.org/bvlc_googlenet.caffemodel
+
 
 - hosts: dream
   tags: ipython
   sudo: yes
   vars:
-    notebook_config: /home/ubuntu/.ipython/profile_default/ipython_notebook_config.py
+    notebook_configdir: /home/ubuntu/.ipython/profile_default
+    notebook_config: "{{ notebook_configdir }}/ipython_notebook_config.py"
   tasks: 
     - name: General dependencies
       apt: name={{ item }}
@@ -149,12 +150,6 @@
     - name: IPython config
       sudo: no
       lineinfile: dest={{ notebook_config }}
-        regexp="c.NotebookApp.password"
-        line="c.NotebookApp.password = u'sha1:f5352e7b4574:6a9c69475a7c43687e006ebfbf5afb3467a74c39'"
-
-    - name: IPython config
-      sudo: no
-      lineinfile: dest={{ notebook_config }}
         regexp="c.NotebookApp.ip"
         line="c.NotebookApp.ip = '*'"
 
@@ -164,8 +159,30 @@
         regexp="c.NotebookApp.open_browser"
         line="c.NotebookApp.open_browser = False"
 
+    - name: Create IPython notebooks notebooks dir
+      file: path=/home/ubuntu/ipython_notebooks state=directory
+
+    - name: IPython notebooks
+      sudo: no
+      lineinfile: dest={{ notebook_config }}
+        regexp="c.NotebookApp.notebook_dir"
+        line="c.NotebookApp.notebook_dir = '/home/ubuntu/ipython_notebooks'"
+
+    - name: IPython config
+      sudo: no
+      lineinfile: dest={{ notebook_config }}
+        regexp="c.NotebookApp.password"
+        line="c.NotebookApp.password = u'sha1:f5352e7b4574:6a9c69475a7c43687e006ebfbf5afb3467a74c39'"
+
+    - name: IPython config
+      sudo: no
+      lineinfile: dest={{ notebook_config }}
+        regexp="c.NotebookApp.certfile"
+        line="c.NotebookApp.certfile = '{{ notebook_configdir }}/hostcert.pem'"
+
     - name: IPython config
       sudo: no
       lineinfile: dest={{ notebook_config }}
         regexp="c.NotebookApp.port"
-        line="c.NotebookApp.port = 80"
+        line="c.NotebookApp.port = 443"
+

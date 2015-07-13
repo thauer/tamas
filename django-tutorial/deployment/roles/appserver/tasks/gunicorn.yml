@@ -1,0 +1,29 @@
+---
+# file: roles/appserver/tasks/gunicorn.yml
+#
+# Installs gunicorn and supervisor
+
+- name: Install gunicorn
+  sudo_user: "{{ webapp.user }}"
+  pip: virtualenv={{ webapp.virtualenv }} name=gunicorn
+
+- name: Install gunicorn start script
+  sudo_user: "{{ webapp.user }}"
+  template: src=gunicorn_start.sh dest={{ webapp.root }} mode=0755
+
+- name: Install supervisor
+  apt: name={{ item }}
+  with_items: 
+    - supervisor
+
+- name: Make sure that supervisor is running
+  service: name=supervisor state=started
+
+- name: Install supervisor start script
+  template: src=gunicorn.conf dest=/etc/supervisor/conf.d/ mode=0755
+
+- name: Add supervisor group
+  supervisorctl: name=gunicorn state=present
+
+- name: Make sure that gunicorn is started
+  supervisorctl: name=gunicorn state=started

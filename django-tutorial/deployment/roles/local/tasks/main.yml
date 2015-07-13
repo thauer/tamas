@@ -1,0 +1,24 @@
+---
+# file: roles/local/tasks/main.yml
+#
+# Collects the static files
+
+# Prerequisite: virtualenv and python-dev, libpq-dev which are required by pip
+# OS X: pip install virtualenv; brew install postgresql
+- name: Ensures that python-virtualenv, pythond-dev and libpq-dev are installed
+  apt: name={{ item }}
+  with_items: 
+    - python-virtualenv
+    - python-dev
+    - libpq-dev
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Creates the local virtualenv
+  command: virtualenv "{{ local.virtualenv }}"
+    creates="{{ local.virtualenv }}/bin/activate"
+
+- name: Installs django and psycopg2 locally
+  pip: virtualenv="{{ local.virtualenv }}" name={{ item }}
+  with_items:
+    - django 
+    - psycopg2

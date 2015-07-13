@@ -1,0 +1,61 @@
+---
+# file: roles/webserver/tasks/main.yml
+#
+# Installs nginx with reverse proxy of '/' to {{ appserver }}
+# /static is served from {{ webapp.root }}/static
+# Syncs localhost:{{ static_dir }} to {{ webapp.root }}/static
+# 
+
+- name: Patches settings.py to define the local static directory
+  sudo: false
+  local_action: lineinfile dest="{{ local.webapp_root }}/mysite/settings.py"
+    regexp='^STATIC_ROOT'
+    line="STATIC_ROOT = '{{ local.static_dir }}'"
+
+- name: Collects the static files locally from the django application
+  sudo: false
+  local_action: django_manage command=collectstatic
+    app_path="{{ local.webapp_root }}" virtualenv="{{ local.virtualenv }}"
+
+- name: Creates webapps group
+  group: name={{ webapp.group }} system=yes
+
+- name: Creates webapps user
+  user: name={{ webapp.user }} group={{ webapp.group }} system=yes
+    shell=/bin/bash home={{ webapp.home }}
+
+- name: Pushes the ssh public key
+  authorized_key: user="{{ webapp.user }}"
+    key="{{ lookup('file', 'authorized_keys') }}"
+
+- name: Creates the static directory
+  sudo_user: "{{ webapp.user }}"
+  file: path="{{ webapp.root }}/static" state=directory
+
+- name: Copies the content of the static directory
+  sudo: false
+  remote_user: "{{ webapp.user }}"
+  synchronize: src="{{ local.static_dir }}/" dest="{{ webapp.root }}/static"
+
+- name: Ensures nginx is installed
+  apt: name=nginx
+
+- name: Ensures sure nginx is running
+  service: name=nginx state=started
+
+- name: Disables the default host
+  file: path=/etc/nginx/sites-enabled/default state=absent
+  register: ngconf1
+
+- name: Copies the host configuration 'mysite'
+  template: src=mysite dest=/etc/nginx/sites-available/
+  register: ngconf2
+
+- name: Enables the virtual host 'mysite'
+  file: path=/etc/nginx/sites-enabled/mysite state=link 
+    src=../sites-available/mysite
+  register: ngconf3
+
+- name: Restarts ngingx
+  service: name=nginx state=restarted
+  when: ngconf1.changed or ngconf2.changed or ngconf3.changed

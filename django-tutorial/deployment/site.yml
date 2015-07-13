@@ -1,0 +1,40 @@
+---
+# file: site.yml
+# Master playbook
+
+- name: Collecting static files
+  tags: local
+  hosts: 127.0.0.1
+  connection: local
+  roles: [local]
+
+- hosts: all
+  tags: all
+  sudo: yes    
+  tasks: 
+  - name: Updates the apt package cache
+    apt: update_cache=yes cache_valid_time=3600
+
+  - name: Upgrades all packages
+    apt: upgrade=dist
+
+- hosts: dbserver
+  tags: dbserver
+  sudo: yes
+  roles: [dbserver]
+
+- hosts: appserver
+  tags: dbserver
+  tasks:
+    - name: Tests that the appserver can talk to the dbserver
+      wait_for: host="{{ database.host }}" port="{{ database.port }}"
+
+- hosts: webserver
+  tags: webserver
+  sudo: yes
+  roles: [webserver]
+
+- hosts: appserver
+  tags: appserver
+  sudo: yes
+  roles: [appserver]

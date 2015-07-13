@@ -1,0 +1,8 @@
+[webserver]
+10.15.20.208
+
+[appserver]
+10.15.20.208
+
+[dbserver]
+10.15.20.208 dbclient_address="10.15.20.0/24"

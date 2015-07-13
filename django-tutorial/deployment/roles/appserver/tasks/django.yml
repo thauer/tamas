@@ -1,0 +1,33 @@
+---
+# file: roles/appserver/tasks/django.yml
+#
+# Syncs webapp to {{ webapp.home }}, creating {{ webapp.root }}, settings_production.py
+
+
+- name: Copies the django project
+  sudo: false
+  remote_user: "{{ webapp.user }}"
+  synchronize: src={{ local.webapp_root }} dest={{ webapp.home }} 
+  # checksum=yes times=no
+
+- name: Copies the production settings
+  sudo_user: "{{ webapp.user }}"
+  template: src=settings_production.py dest={{ webapp.root }}/mysite
+
+- name: django migrate database
+  sudo_user: "{{ webapp.user }}"
+  environment:
+    DJANGO_SETTINGS_MODULE: mysite.settings_production
+  django_manage: command=migrate app_path={{ webapp.root }}
+    virtualenv={{ webapp.virtualenv }}
+
+- name: Copies the database fixture json file
+  sudo_user: "{{ webapp.user }}"
+  template: src=dbbootstrap.json dest=/tmp
+
+- name: Applies the initial fixture to the database
+  sudo_user: "{{ webapp.user }}"
+  environment:
+    DJANGO_SETTINGS_MODULE: mysite.settings_production
+  django_manage: command="loaddata /tmp/dbbootstrap.json" app_path={{ webapp.root }}
+    virtualenv={{ webapp.virtualenv }}

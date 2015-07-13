@@ -1,0 +1,46 @@
+---
+# file: roles/dbserver/tasks/main.yml
+#
+# Installs {{ database.version }} connectable from {{ database.intranet }}
+# Creates {{ database.name }} with {{ database.user }} and {{ database.password }}
+#
+# To drop and recreate the db: -e "dropdb=True"
+
+- name: Ensures that postgresql is installed
+  apt: name={{item}}
+  with_items: 
+    - postgresql-{{ database.version }}
+    - python-psycopg2
+
+- name: Ensures that postgresql is running
+  service: name="postgresql" state="started"
+
+- name: Reconfigures postgresql to listen on 0.0.0.0/0
+  sudo_user: postgres
+  lineinfile: dest=/etc/postgresql/{{ database.version }}/main/postgresql.conf
+    regexp='^listen_addresses = ' line="listen_addresses = '*'"
+  register: pgconf1
+
+- name: Allows access from the intranet (specified by variable database.intranet)
+  sudo_user: postgres
+  lineinfile: dest=/etc/postgresql/{{ database.version }}/main/pg_hba.conf
+    line="host all all {{ dbclient_address }} md5" insertafter="EOF"
+  register: pgconf2
+
+- name: Restarts postgresql
+  service: name="postgresql" state="restarted"
+  when: pgconf1.changed or pgconf2.changed
+
+- name: Creates the database user
+  sudo_user: postgres
+  postgresql_user: name={{ database.user }} password={{ database.password }}
+    role_attr_flags=NOSUPERUSER,NOCREATEDB,NOCREATEROLE
+
+- name: Drops the database provided variable dropdb is True
+  sudo_user: postgres
+  postgresql_db: name={{ database.name }} state=absent
+  when: dropdb|default(False)
+
+- name: Ensures that the database exists and is owned by the database user
+  sudo_user: postgres
+  postgresql_db: name={{ database.name }} owner={{ database.user }}

@@ -1,0 +1,37 @@
+---
+# file: roles/appserver/tasks/main.yml
+#
+# Creates {{ webapp.home }} owned by {{ webapp.group }}:{{ webapp.user }}
+# Installs in it virtualenv and django
+
+- name: Installs supervisor, virtualenv and python-dev, libpq-dev as required by pip
+  apt: name={{ item }}
+  with_items: 
+    - python-virtualenv
+    - python-dev
+    - libpq-dev
+
+- name: Create webapps group
+  group: name={{ webapp.group }} system=yes
+
+- name: Create webapps user
+  user: name={{ webapp.user }} group={{ webapp.group }} system=yes
+    shell=/bin/bash home={{ webapp.home }}
+
+- name: Add the ssh key
+  authorized_key: user={{ webapp.user }} key="{{ lookup('file', 'authorized_keys') }}"
+
+- name: Create the virtualenv
+  sudo_user: "{{ webapp.user }}"
+  command: virtualenv {{ webapp.virtualenv }} 
+    creates={{ webapp.virtualenv }}/bin/activate
+
+- name: Install django and psycopg2
+  sudo_user: "{{ webapp.user }}"
+  pip: virtualenv={{ webapp.virtualenv }} name={{item}}
+  with_items:
+    - django 
+    - psycopg2
+
+- include: "django.yml"
+- include: "gunicorn.yml"
