@@ -107,7 +107,7 @@
     - name: fetch model
       get_url: dest={{ caffe_dir }}/models/bvlc_googlenet
         url=http://dl.caffe.berkeleyvision.org/bvlc_googlenet.caffemodel
-        
+
 - hosts: dream
   tags: googlemodel
   sudo: yes
@@ -117,7 +117,6 @@
     - name: fetch model
       get_url: dest={{ caffe_dir }}/models/bvlc_googlenet
         url=http://dl.caffe.berkeleyvision.org/bvlc_googlenet.caffemodel
-
 
 - hosts: dream
   tags: ipython
@@ -150,16 +149,11 @@
     - name: IPython config
       sudo: no
       lineinfile: dest={{ notebook_config }}
-        regexp="c.NotebookApp.ip"
-        line="c.NotebookApp.ip = '*'"
-
-    - name: IPython config
-      sudo: no
-      lineinfile: dest={{ notebook_config }}
         regexp="c.NotebookApp.open_browser"
         line="c.NotebookApp.open_browser = False"
 
     - name: Create IPython notebooks notebooks dir
+      sudo: no
       file: path=/home/ubuntu/ipython_notebooks state=directory
 
     - name: IPython notebooks
@@ -177,12 +171,47 @@
     - name: IPython config
       sudo: no
       lineinfile: dest={{ notebook_config }}
-        regexp="c.NotebookApp.certfile"
-        line="c.NotebookApp.certfile = '{{ notebook_configdir }}/hostcert.pem'"
-
-    - name: IPython config
-      sudo: no
-      lineinfile: dest={{ notebook_config }}
         regexp="c.NotebookApp.port"
-        line="c.NotebookApp.port = 443"
+        line="c.NotebookApp.port = 8888"
 
+- hosts: dream
+  tags: service
+  sudo: yes
+  tasks: 
+    - name: Install supervisor
+      apt: name=supervisor
+
+    - name: Make sure that supervisor is running
+      service: name=supervisor state=started
+
+    - name: Install supervisor start script
+      copy: src=ipython_notebook.conf dest=/etc/supervisor/conf.d/ mode=0755
+
+    - name: Add supervisor group
+      supervisorctl: name=ipython_notebook state=present
+
+    - name: Make sure that ipython_notebook is started
+      supervisorctl: name=ipython_notebook state=started
+
+    - name: Ensures nginx is installed
+      apt: name=nginx
+
+    - name: Ensures sure nginx is running
+      service: name=nginx state=started
+
+    - name: Disables the default host
+      file: path=/etc/nginx/sites-enabled/default state=absent
+      register: ngconf1
+
+    - name: Copies the host configuration 'mysite'
+      template: src=dream.conf dest=/etc/nginx/sites-available/
+      register: ngconf2
+
+    - name: Enables the virtual host 'dream.conf'
+      file: path=/etc/nginx/sites-enabled/dream.conf state=link 
+        src=../sites-available/dream.conf
+      register: ngconf3
+
+    - name: Restarts ngingx
+      service: name=nginx state=restarted
+      when: ngconf1.changed or ngconf2.changed or ngconf3.changed
