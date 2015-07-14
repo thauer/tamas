@@ -42,7 +42,7 @@
   sudo: no
   lineinfile: dest={{ notebook_config }}
     regexp="c.NotebookApp.password"
-    line="c.NotebookApp.password = u'sha1:f5352e7b4574:6a9c69475a7c43687e006ebfbf5afb3467a74c39'"
+    line="c.NotebookApp.password = u'sha1:11819e6a56b8:e7ae320c50708f60a63415ad876166c03070a2c3'"
 
 - name: IPython config
   sudo: no
