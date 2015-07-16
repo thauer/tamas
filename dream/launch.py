@@ -30,7 +30,7 @@ if len(sys.argv) == 2 and sys.argv[1] == 'spot':
     logging.info(spotInstanceRequest.state + " / " + 
       spotInstanceRequest.status.code + " / " + spotInstanceRequest.status.message)
     if spotInstanceRequest.state == "fulfilled": break
-    time.sleep(20)
+    time.sleep(60)
 
   if spotInstanceRequest.instance_id != None:
     instance = conn.get_only_instances(instance_ids=[spotInstanceRequest.instance_id])[0]
