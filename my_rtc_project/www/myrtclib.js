@@ -3,24 +3,16 @@ var getUserMedia = null;
 var attachMediaStream = null;
 var reattachMediaStream = null;
 var webrtcDetectedBrowser = null;
-
 var room = null;
-
 var initiator;
-
 var localStream;
 var remoteStream;
-
 var pc = null;
-
 var signalingURL;
-
 var localVideo;
 var remoteVideo;
-
 var channelReady;
 var channel;
-
 var pc_config = {"iceServers": [{url:'stun:23.21.150.121'}, 
                                 {url:'stun:stun.l.google.com:19302'}]};
 
@@ -136,7 +128,24 @@ function doCall() {
       if(prop.indexOf("Moz") != -1) delete constraints.mandatory[prop];
 
   constraints = mergeConstraints(constraints, sdpConstraints);
-  pc.createOffer(setLocalAndSendMessage, null, constraint);
+  pc.createOffer(setLocalAndSendMessage, null, constraints);
+};
+
+function doAnswer() {
+  pc.createAnswer(setLocalAndSendMessage, null, sdpConstraints);
+};
+
+function setLocalAndSendMessage(sessionDescription) {
+  pc.setLocalDescription(sessionDescription);
+  sendMessage(sessionDescription);
+};
+
+function mergeConstraints(cons1, cons2) {
+  var merged = cons1;
+  for(var name in cons2.mandatory)
+    merged.mandatory[name] = cons2.mandatory[name];
+  merged.optional.concat(cons2.optional);
+  return merged;
 }
 
 
