@@ -23,7 +23,8 @@ websocket_handle({text, Data}, Req, State) ->
       State
   end,
   JSON = jsonerl:decode(Data),
-    {M, Type} = element(1, JSON), case M of <<"type">> -> case Type of 
+  {M, Type} = element(1, JSON), case M of 
+    <<"type">> -> case Type of 
       <<"GETROOM">> -> 
         Room = generate_room(),
         R = iolist_to_binary(jsonerl:encode({{type, <<"GETROOM">>},{value, Room}})),
@@ -31,28 +32,43 @@ websocket_handle({text, Data}, Req, State) ->
         gproc:reg({p, 1, Room}),
         S = (StateNew#state{room = Room}),
         {reply, {text, <<R/binary>>}, Req, S, hibernate};
-        <<"ENTERROOM">> -> 
-          {<<"value">>, Room} = element(2, JSON),
-          Participants = gproc: lookup_pids({p, 1, Room}),
-          case length(Participants) of 
-            1 -> 
-              gproc:reg({p, 1, Room}),
-              S = (StateNew#state{room = Room}),
-              {ok, Req, S, hibernate};
+      <<"ENTERROOM">> -> 
+        {<<"value">>, Room} = element(2, JSON),
+        Participants = gproc: lookup_pids({p, 1, Room}),
+        case length(Participants) of 
+          1 -> 
+            gproc:reg({p, 1, Room}),
+            S = (StateNew#state{room = Room}),
+            {ok, Req, S, hibernate};
 
-            _ -> 
-              R = iolist_to_binary(jsonerl:encode({{type,
-                <<"WRONGROOM">>}})), {reply, {text, <<R/binary>>}, Req,
-                StateNew, hibernate}
-              end;
-          websocket_handle(_Any, Req, State) -> 
-            {ok, Req, State, hibernate}.
+          _ -> 
+            R = iolist_to_binary(jsonerl:encode({{type,<<"WRONGROOM">>}})), 
+            {reply, {text, <<R/binary>>}, Req, StateNew, hibernate}
+        end;
+      _ -> 
+        reply2peer(Data, StateNew#state.room),
+        {ok, Req, StateNew, hibernate}
+    end;
+    _ -> 
+      reply2peer(Data, State#state.room),
+      {ok, Req, StateNew, hibernate}
+  end;
+
+websocket_handle(_Any, Req, State) -> 
+  {ok, Req, State, hibernate}.
 
 websocket_info(_Info, Req, State) -> 
   {reply, {text, _Info}, Req, State, hibernate}.
 
 websocket_terminate(_Reason, _Req, _State) -> 
   ok.
+
+reply2peer(R, Room) -> 
+  [P ! <<R/binary>> || P <- gproc:lookup_pids({p, 1, Room}) -- [self()]].
+
+generate_room() -> 
+  random:seed(now()),
+  random:uniform(999999).
 
 
 
