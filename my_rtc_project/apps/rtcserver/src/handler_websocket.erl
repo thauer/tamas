@@ -1,6 +1,6 @@
 -module(handler_websocket).
 -behaviour(cowboy_websocket_handler).
--export([websocket_init/3, websocket_handle/3, websocket_info/3, websocket_terminate/3]).
+-export([init/3, websocket_init/3, websocket_handle/3, websocket_info/3, websocket_terminate/3]).
 -record(state, {
     client = undefined :: undefined | binary(),
     state = undefined :: undefined | connected | running, 
@@ -22,39 +22,45 @@ websocket_handle({text, Data}, Req, State) ->
     _ -> 
       State
   end,
+  % Deserialize the message (Data) as JSON
+  io:format(Data),
   JSON = jsonerl:decode(Data),
-  {M, Type} = element(1, JSON), case M of 
-    <<"type">> -> case Type of 
-      <<"GETROOM">> -> 
-        Room = generate_room(),
-        R = iolist_to_binary(jsonerl:encode({{type, <<"GETROOM">>},{value, Room}})),
+  io:format("HELLO"),
+  io:format(JSON),
+  {M, Type} = element(1, JSON), 
+  case M of 
+    <<"type">> -> 
+      case Type of 
+        <<"GETROOM">> -> % {M, Type} == {<<"type">>, <<"GETROOM">>}
+          Room = generate_room(),
+          R = iolist_to_binary(jsonerl:encode({{type, <<"GETROOM">>},{value, Room}})),
+          gproc:reg({p, 1, Room}), % Store the room number and process id in the key/value DB
+          S = (StateNew#state{room = Room}),
+          {reply, {text, <<R/binary>>}, Req, S, hibernate}; % Response, end of story
 
-        gproc:reg({p, 1, Room}),
-        S = (StateNew#state{room = Room}),
-        {reply, {text, <<R/binary>>}, Req, S, hibernate};
-      <<"ENTERROOM">> -> 
-        {<<"value">>, Room} = element(2, JSON),
-        Participants = gproc: lookup_pids({p, 1, Room}),
-        case length(Participants) of 
-          1 -> 
-            gproc:reg({p, 1, Room}),
-            S = (StateNew#state{room = Room}),
-            {ok, Req, S, hibernate};
+        <<"ENTERROOM">> -> % {M, Type} == {<<"type">>, <<"ENTERROOM">>}
+          {<<"value">>, Room} = element(2, JSON),
+          Participants = gproc:lookup_pids({p, 1, Room}),
+          case length(Participants) of 
+            1 -> 
+              gproc:reg({p, 1, Room}),
+              S = (StateNew#state{room = Room}),
+              {ok, Req, S, hibernate}; % Response, end of story
 
-          _ -> 
-            R = iolist_to_binary(jsonerl:encode({{type,<<"WRONGROOM">>}})), 
-            {reply, {text, <<R/binary>>}, Req, StateNew, hibernate}
-        end;
-      _ -> 
-        reply2peer(Data, StateNew#state.room),
-        {ok, Req, StateNew, hibernate}
-    end;
-    _ -> 
+            _ -> 
+              R = iolist_to_binary(jsonerl:encode({{type,<<"WRONGROOM">>}})), 
+              {reply, {text, <<R/binary>>}, Req, StateNew, hibernate} % Response, end of story
+          end;
+        _ -> 
+          reply2peer(Data, StateNew#state.room), % Transfer other messages to connected peer
+          {ok, Req, StateNew, hibernate} % Response, end of story
+      end;
+    _ -> % Transfer other messages (not <<"type">>) to connected peer
       reply2peer(Data, State#state.room),
       {ok, Req, StateNew, hibernate}
   end;
 
-websocket_handle(_Any, Req, State) -> 
+websocket_handle(_Any, Req, State) -> % Message not of the form {text, Data}
   {ok, Req, State, hibernate}.
 
 websocket_info(_Info, Req, State) -> 

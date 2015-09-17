@@ -12,7 +12,9 @@ start() ->
   ok = application:start(rtcserver).
 
 start(_StartType, _StartArgs) ->
-  Dispatch = cowboy_router:compile([{'_', [{"/", handler_websocket, []}]}]),
+  Dispatch = cowboy_router:compile([{'_', [
+    {"/", handler_websocket, []}
+    ]}]),
 
   {ok, _} = cowboy:start_http(websocket, 100, [{port, 30000}],
       [{env, [{dispatch, Dispatch}]},
