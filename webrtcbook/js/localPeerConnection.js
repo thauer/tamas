@@ -33,19 +33,19 @@ callButton.onclick = function() {
   remotePeerConnection = new webkitRTCPeerConnection(servers);
 
   localPeerConnection.onicecandidate = function(event) {
-    console.log("localPeerConnection.onicecandidate");
+    console.log("localPeerConnection.onicecandidate( %o )", event);
     if(event.candidate)
       remotePeerConnection.addIceCandidate(new RTCIceCandidate(event.candidate));
   };
 
   remotePeerConnection.onicecandidate = function(event) {
-    console.log("remotePeerConnection.onicecandidate");
+    console.log("remotePeerConnection.onicecandidate( %o )", event);
     if(event.candidate)
       localPeerConnection.addIceCandidate(new RTCIceCandidate(event.candidate));
   };
 
   remotePeerConnection.onaddstream = function gotRemoteStream(event){
-    console.log("remotePeerConnection.onaddstream");
+    console.log("remotePeerConnection.onaddstream( %o )", event);
     remoteVideo.src = window.URL.createObjectURL(event.stream);
   }
 
@@ -53,12 +53,12 @@ callButton.onclick = function() {
 
   localPeerConnection.createOffer(
     function(description) {
-      console.log("createOffer.callback(" + description.type + ")");
+      console.log("createOffer.callback( %o )", description);
       localPeerConnection.setLocalDescription(description);
       remotePeerConnection.setRemoteDescription(description);
       remotePeerConnection.createAnswer(
         function(description) {
-          console.log("createAnswer.callback(" + description.type + ")")
+          console.log("createAnswer.callback( %o )", description);
           remotePeerConnection.setLocalDescription(description);
           localPeerConnection.setRemoteDescription(description);
         },
