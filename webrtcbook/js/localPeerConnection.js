@@ -30,7 +30,9 @@ callButton.onclick = function() {
 
   var servers = null;
   localPeerConnection = new webkitRTCPeerConnection(servers);
+  console.log("%o.new()", localPeerConnection);
   remotePeerConnection = new webkitRTCPeerConnection(servers);
+  console.log("%o.new()", remotePeerConnection);
 
   localPeerConnection.onicecandidate = function(event) {
     console.log("localPeerConnection.onicecandidate( %o )", event);
@@ -49,6 +51,7 @@ callButton.onclick = function() {
     remoteVideo.src = window.URL.createObjectURL(event.stream);
   }
 
+  console.log("%o.addStream( %o )", localPeerConnection, localStream);
   localPeerConnection.addStream(localStream);
 
   localPeerConnection.createOffer(
@@ -64,6 +67,8 @@ callButton.onclick = function() {
         },
         function(error){ console.log("Failed to create signaling message: " + error.name )}
       );
+      console.log("returned from createAnswer()");
     }
   );
+  console.log("returned from createOffer()");
 };
