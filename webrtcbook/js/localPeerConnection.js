@@ -35,21 +35,25 @@ callButton.onclick = function() {
   console.log("%o.new()", remotePeerConnection);
 
   localPeerConnection.onicecandidate = function(event) {
-    console.log("localPeerConnection.onicecandidate( %o )", event);
-    if(event.candidate)
+//    console.log("localPeerConnection.onicecandidate( %o )", event);
+    if(event.candidate) {
       remotePeerConnection.addIceCandidate(new RTCIceCandidate(event.candidate));
+      console.log("Local ICE candidate: %s", event.candidate.candidate);
+    }
   };
 
   remotePeerConnection.onicecandidate = function(event) {
-    console.log("remotePeerConnection.onicecandidate( %o )", event);
-    if(event.candidate)
+//    console.log("remotePeerConnection.onicecandidate( %o )", event);
+    if(event.candidate) {
       localPeerConnection.addIceCandidate(new RTCIceCandidate(event.candidate));
+      console.log("Remote ICE candidate: %s", event.candidate.candidate);
+    }
   };
 
-  remotePeerConnection.onaddstream = function gotRemoteStream(event){
+  remotePeerConnection.onaddstream = function(event){
     console.log("remotePeerConnection.onaddstream( %o )", event);
     remoteVideo.src = window.URL.createObjectURL(event.stream);
-  }
+  };
 
   console.log("%o.addStream( %o )", localPeerConnection, localStream);
   localPeerConnection.addStream(localStream);
