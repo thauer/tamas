@@ -35,18 +35,18 @@ callButton.onclick = function() {
   console.log("%o.new()", remotePeerConnection);
 
   localPeerConnection.onicecandidate = function(event) {
-//    console.log("localPeerConnection.onicecandidate( %o )", event);
+    console.log("localPeerConnection.onicecandidate( %o )", event);
     if(event.candidate) {
       remotePeerConnection.addIceCandidate(new RTCIceCandidate(event.candidate));
-      console.log("Local ICE candidate: %s", event.candidate.candidate);
+      console.log("   Local ICE candidate: %s", event.candidate.candidate);
     }
   };
 
   remotePeerConnection.onicecandidate = function(event) {
-//    console.log("remotePeerConnection.onicecandidate( %o )", event);
+    console.log("remotePeerConnection.onicecandidate( %o )", event);
     if(event.candidate) {
       localPeerConnection.addIceCandidate(new RTCIceCandidate(event.candidate));
-      console.log("Remote ICE candidate: %s", event.candidate.candidate);
+      console.log("   Remote ICE candidate: %s", event.candidate.candidate);
     }
   };
 
