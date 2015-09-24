@@ -30,26 +30,29 @@ callButton.onclick = function() {
 
   var servers = null;
   localPeerConnection = new webkitRTCPeerConnection(servers);
-  console.log("%o.new()", localPeerConnection);
+  console.log("localPC = %o.new()", localPeerConnection);
   remotePeerConnection = new webkitRTCPeerConnection(servers);
-  console.log("%o.new()", remotePeerConnection);
+  console.log("rempotePC = %o.new()", remotePeerConnection);
 
   localPeerConnection.onicecandidate = function(event) {
-    console.log("localPeerConnection.onicecandidate( %o )", event);
     if(event.candidate) {
       remotePeerConnection.addIceCandidate(new RTCIceCandidate(event.candidate));
-      console.log("   Local ICE candidate: %s", event.candidate.candidate);
+      console.log("Local ICE candidate: %o %s", event, event.candidate.candidate);
     }
   };
 
   remotePeerConnection.onicecandidate = function(event) {
-    console.log("remotePeerConnection.onicecandidate( %o )", event);
     if(event.candidate) {
       localPeerConnection.addIceCandidate(new RTCIceCandidate(event.candidate));
-      console.log("   Remote ICE candidate: %s", event.candidate.candidate);
+      console.log("Remote ICE candidate: %o %s", event, event.candidate.candidate);
     }
   };
 
+  /* The onaddstream and onremovestream handlers are called any time 
+      a MediaStream is respectively added or removed by the remote peer.
+      Both will be fired only as a result of the execution of the 
+      setRemoteDescription() method.
+  */
   remotePeerConnection.onaddstream = function(event){
     console.log("remotePeerConnection.onaddstream( %o )", event);
     remoteVideo.src = window.URL.createObjectURL(event.stream);
