@@ -7,8 +7,8 @@ import sdl2.events
 import thread
 import ctypes
     
-barlength = 0.1 # In seconds
-period = 5 # In seconds
+barlength = 0.03 # In seconds
+period = 3 # In seconds
 squaresize = 10  # Size of square to blink
 color0 = sdl2.ext.Color(0, 0, 0)
 color1 = sdl2.ext.Color(200, 200, 200)
@@ -28,25 +28,27 @@ def blinker(phoneid=0, pattern = [1,0]):
     for bit in pattern:
       raiseUserEvent(phoneid, bit)
       time.sleep(barlength)
+    raiseUserEvent(phoneid, 0) # always switch off
     time.sleep(period - barlength * len(pattern))
 
 def addphone(phones, phoneid, posx, posy, pattern):
   """ Adds a new phone to the dictionary 'phones' with the given id at the
   given position and pattern and starts blinking it
   """
+  patternArray = []
+  while pattern != 0:
+    patternArray.insert(0, pattern & 1)
+    pattern >>= 1
   phones[phoneid] = (posx, posy, squaresize, squaresize)
-  thread.start_new_thread(blinker, (), {'phoneid': phoneid, 'pattern': pattern})
+  thread.start_new_thread(blinker, (), {'phoneid': phoneid, 'pattern': patternArray})
 
-def run():
+def run(phones):
   sdl2.ext.init()
-  window = sdl2.ext.Window("flashmob", size=(800, 600))
+  window = sdl2.ext.Window("flashmob", size=(1920, 1200))
   window.show()
+  window.maximize()
   sdl2.ext.fill(window.get_surface(), 0)
   window.refresh()
-
-  phones = {}
-  addphone(phones, 1, 100, 100, [1,1,1,1,1,1,1,1,0,0,0,0,0,0,0])
-  addphone(phones, 2, 200, 300, [1,1,0,0,1,1,0,0,1,1,0,0,1,1,0])
 
   running = True
   while running:
@@ -65,4 +67,10 @@ def run():
   return 0
 
 if __name__ == "__main__":
-  sys.exit(run())
+  phones = {}
+  addphone(phones, 1,  300,  300, 0b110001100011000110001100011000110)
+  addphone(phones, 2, 1500,  800, 0b110011001100110011001100110011001)
+  addphone(phones, 3,  700,  500, 0b101001010110101011110101011010110)
+  addphone(phones, 4, 1200, 1000, 0b101001010110101011110101011010110)
+
+  sys.exit(run(phones))
