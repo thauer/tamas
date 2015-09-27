@@ -1,53 +1,67 @@
 """SDL Rectangle"""
 import sys
-from time import sleep
-from sdl2 import (SDL_QUIT, SDL_MOUSEBUTTONDOWN, SDL_Color)
-import sdl2.ext as sdl2ext
-
-def draw_rects(surface, width, height):
-  for k in range(15):
-    x, y = randint(0, width), randint(0, height)
-    w, h = randint(1, width // 2), randint(1, height // 2)
-    color = sdl2ext.Color(randint(0, 255), randint(0, 255), randint(0, 255))
-    sdl2ext.fill(surface, color, (x, y, w, h))
+import time
+import sdl2
+import sdl2.ext
+import sdl2.events
+import thread
+import ctypes
     
-barlength = 0.01 # In seconds
+barlength = 0.1 # In seconds
+period = 5 # In seconds
 squaresize = 10  # Size of square to blink
-color0 = sdl2ext.Color(0, 0, 0)
-color1 = sdl2ext.Color(200, 200, 200)
+color0 = sdl2.ext.Color(0, 0, 0)
+color1 = sdl2.ext.Color(200, 200, 200)
 
-def emitCode( pattern, window, x, y ):
-  """ Emits the code specified in pattern (expects array of ints) in the given window,
-  at the given (x, y) position
+def raiseUserEvent(data1, data2):
+  userevent = sdl2.events.SDL_UserEvent(type=sdl2.events.SDL_USEREVENT, 
+                                        data1=data1, data2=data2)
+  event = sdl2.events.SDL_Event(user=userevent)
+  sdl2.events.SDL_PushEvent(ctypes.byref(event), 1)
+
+def blinker(phoneid=0, pattern = [1,0]):
+  """ Body of a thread which raises user events according to the given pattern
+  with the phoneid stored in data1 and the on-off bit in data2, repeated every
+  period time.
   """
-  for bit in pattern:
-    if bit == 0:
-      color = color0
-    else:
-      color = color1
+  while True:
+    for bit in pattern:
+      raiseUserEvent(phoneid, bit)
+      time.sleep(barlength)
+    time.sleep(period - barlength * len(pattern))
 
-    sdl2ext.fill(window.get_surface(), color, (x, y, squaresize, squaresize))
-    sleep(barlength)
-    window.refresh()
+def addphone(phones, phoneid, posx, posy, pattern):
+  """ Adds a new phone to the dictionary 'phones' with the given id at the
+  given position and pattern and starts blinking it
+  """
+  phones[phoneid] = (posx, posy, squaresize, squaresize)
+  thread.start_new_thread(blinker, (), {'phoneid': phoneid, 'pattern': pattern})
 
 def run():
-  sdl2ext.init()
-  window = sdl2ext.Window("flashmob", size=(800, 600))
+  sdl2.ext.init()
+  window = sdl2.ext.Window("flashmob", size=(800, 600))
   window.show()
-
-  sdl2ext.fill(window.get_surface(), 0)
+  sdl2.ext.fill(window.get_surface(), 0)
   window.refresh()
+
+  phones = {}
+  addphone(phones, 1, 100, 100, [1,1,1,1,1,1,1,1,0,0,0,0,0,0,0])
+  addphone(phones, 2, 200, 300, [1,1,0,0,1,1,0,0,1,1,0,0,1,1,0])
 
   running = True
   while running:
-    events = sdl2ext.get_events()
+    events = sdl2.ext.get_events()
     for event in events:
-      if event.type == SDL_QUIT:
+      if event.type == sdl2.SDL_QUIT:
         running = False
-    emitCode([1,0,0,1,0,0,1,1,1,0,0,1,0,1,0], window, 100, 100)
-    sleep(5)
+      if event.type == sdl2.events.SDL_USEREVENT:
+        if event.user.data2 == 1:
+          sdl2.ext.fill(window.get_surface(), color1, phones[event.user.data1])
+        else:
+          sdl2.ext.fill(window.get_surface(), color0, phones[event.user.data1])
+
     window.refresh()
-  sdl2ext.quit()
+  sdl2.ext.quit()
   return 0
 
 if __name__ == "__main__":
