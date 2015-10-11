@@ -12,8 +12,10 @@ hangupButton.disabled = true;
 
 startButton.onclick = function() {
   startButton.disabled = true;
+  console.log("%o", navigator);
   navigator.webkitGetUserMedia({audio:true, video:true}, 
     function(stream) {
+      console.log("getUserMedia.callback( %o )", stream)
       localVideo.src = URL.createObjectURL(stream);
       localStream = stream;
       callButton.disabled = false;
@@ -62,15 +64,15 @@ callButton.onclick = function() {
   localPeerConnection.addStream(localStream);
 
   localPeerConnection.createOffer(
-    function(description) {
-      console.log("createOffer.callback( %o )", description);
-      localPeerConnection.setLocalDescription(description);
-      remotePeerConnection.setRemoteDescription(description);
+    function(offer) {
+      console.log("createOffer.callback( %o )", offer);
+      localPeerConnection.setLocalDescription(offer);
+      remotePeerConnection.setRemoteDescription(offer);
       remotePeerConnection.createAnswer(
-        function(description) {
-          console.log("createAnswer.callback( %o )", description);
-          remotePeerConnection.setLocalDescription(description);
-          localPeerConnection.setRemoteDescription(description);
+        function(answer) {
+          console.log("createAnswer.callback( %o )", answer);
+          remotePeerConnection.setLocalDescription(answer);
+          localPeerConnection.setRemoteDescription(answer);
         },
         function(error){ console.log("Failed to create signaling message: " + error.name )}
       );
@@ -79,3 +81,15 @@ callButton.onclick = function() {
   );
   console.log("returned from createOffer()");
 };
+
+hangupButton.onclick = function() {
+  localPeerConnection.close();
+  remotePeerConnection.close();
+  console.log("hangup: %o, %o", localPeerConnection, remotePeerConnection);
+
+  localPeerConnection = null;
+  remotePeerConnection = null;
+
+  hangupButton.disabled = true;
+  callButton.disabled = false;
+}
