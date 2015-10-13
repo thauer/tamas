@@ -52,25 +52,10 @@ startButton.onclick = function () {
     }
   };
 
-  sendChannel = localPeerConnection.createDataChannel("sendDataChannel", {reliable: true});
 
-  handleSendChannelStateChange = function() {
-    var readyState = sendChannel.readyState;
-    if(readyState == "open") {
-      dataChannelSend.disabled = false;
-      dataChannelSend.focus();
-      dataChannelSend.placeholder = "";
-      sendButton.disabled = false;
-      closeButton.disabled = false;
-    } else {
-      dataChannelSend.disabled = true;
-      sendButton.disabled = true;
-      closeButton.disabled = true;
-    }
-  } 
 
-  sendChannel.onopen = handleSendChannelStateChange;
-  sendChannel.onclose = handleSendChannelStateChange;
+
+
 
   remotePeerConnection.ondatachannel = function(event) {
     receiveChannel = event.channel;
@@ -81,6 +66,22 @@ startButton.onclick = function () {
     };
     receiveChannel.onclose = function() {};
   };
+
+  sendChannel = localPeerConnection.createDataChannel("sendDataChannel", {reliable: true});
+
+  sendChannel.onopen = function() {
+    dataChannelSend.disabled = false;
+    dataChannelSend.focus();
+    dataChannelSend.placeholder = "";
+    sendButton.disabled = false;
+    closeButton.disabled = false;    
+  }
+
+  sendChannel.onclose = function() {
+    dataChannelSend.disabled = true;
+    sendButton.disabled = true;
+    closeButton.disabled = true;    
+  }
 
   localPeerConnection.createOffer(
     function(offer) {
