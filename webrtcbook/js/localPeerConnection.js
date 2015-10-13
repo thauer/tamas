@@ -1,4 +1,5 @@
 var localStream, localPeerConnection, remotePeerConnection;
+
 var localVideo = document.getElementById("localVideo");
 var remoteVideo = document.getElementById("remoteVideo");
 
@@ -31,6 +32,7 @@ callButton.onclick = function() {
   hangupButton.disabled = false;
 
   var servers = null;
+
   localPeerConnection = new webkitRTCPeerConnection(servers);
   console.log("localPC = %o.new()", localPeerConnection);
   remotePeerConnection = new webkitRTCPeerConnection(servers);
@@ -38,14 +40,14 @@ callButton.onclick = function() {
 
   localPeerConnection.onicecandidate = function(event) {
     if(event.candidate) {
-      remotePeerConnection.addIceCandidate(new RTCIceCandidate(event.candidate));
+      remotePeerConnection.addIceCandidate(event.candidate);
       console.log("Local ICE candidate: %o %s", event, event.candidate.candidate);
     }
   };
 
   remotePeerConnection.onicecandidate = function(event) {
     if(event.candidate) {
-      localPeerConnection.addIceCandidate(new RTCIceCandidate(event.candidate));
+      localPeerConnection.addIceCandidate(event.candidate);
       console.log("Remote ICE candidate: %o %s", event, event.candidate.candidate);
     }
   };

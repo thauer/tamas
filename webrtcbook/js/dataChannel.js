@@ -1,5 +1,8 @@
 var sendChannel, receiveChannel
 
+var sendArea = document.getElementById("dataChannelSend");
+var receiveArea = document.getElementById("dataChannelReceive");
+
 var startButton = document.getElementById("startButton");
 var sendButton = document.getElementById("sendButton");
 var closeButton = document.getElementById("closeButton");
@@ -8,15 +11,44 @@ startButton.disabled = false;
 sendButton.disabled = true;
 closeButton.disabled = true;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 startButton.onclick = function () {
+  startButton.disabled = true;
+  closeButton.disabled = false;
 
   var servers = null;
   var pc_constraints = { 'optional': [{'DtlsSrtpKeyAgreement':true}]};
   localPeerConnection = new webkitRTCPeerConnection(servers, pc_constraints);
+  console.log("localPC = %o.new()", localPeerConnection);
+  remotePeerConnection = new webkitRTCPeerConnection(servers, pc_constraints);
+  console.log("rempotePC = %o.new()", remotePeerConnection);
 
   localPeerConnection.onicecandidate = function(event) {
     if( event.candidate ) {
       remotePeerConnection.addIceCandidate(event.candidate);
+      console.log("Local ICE candidate: %o %s", event, event.candidate.candidate);
+    }
+  };
+
+  remotePeerConnection.onicecandidate = function(event) {
+    if( event.candidate ) {
+      localPeerConnection.addIceCandidate(event.candidate);
+      console.log("Remote ICE candidate: %o %s", event, event.candidate.candidate);
     }
   };
 
@@ -40,45 +72,37 @@ startButton.onclick = function () {
   sendChannel.onopen = handleSendChannelStateChange;
   sendChannel.onclose = handleSendChannelStateChange;
 
-  window.remotePeerConnection = new webkitRTCPeerConnection(servers, pc_constraints);
-
-  remotePeerConnection.onicecandidate = function(event) {
-    if( event.candidate ) {
-      localPeerConnection.addIceCandidate(event.candidate);
-    }
-  };
-
   remotePeerConnection.ondatachannel = function(event) {
     receiveChannel = event.channel;
     receiveChannel.onopen = function() {};
     receiveChannel.onmessage = function(event) {
-      document.getElementById("dataChannelReceive").value = event.data;
-      document.getElementById("dataChannelSend").value = ""
+      receiveArea.value = event.data;
+      sendArea.value = ""
     };
     receiveChannel.onclose = function() {};
   };
 
   localPeerConnection.createOffer(
     function(offer) {
+      console.log("createOffer.callback( %o )", offer);
       localPeerConnection.setLocalDescription(offer);
       remotePeerConnection.setRemoteDescription(offer);
       remotePeerConnection.createAnswer(
         function(answer) {
+          console.log("createAnswer.callback( %o )", answer);
           localPeerConnection.setRemoteDescription(answer);
           remotePeerConnection.setLocalDescription(answer);
         },
         function(error) {console.log('Failed to create signaling message ' + error.name); }
-      )
-    }, 
-    function(error) { console.log('Failed to create signaling message: ' + error.name); }
-  )
-
-  startButton.disabled = true;
-  closeButton.disabled = false;
+      );
+      console.log("returned from createAnswer()");
+    } 
+  );
+  console.log("returned from createOffer()");
 }
 
 sendButton.onclick = function () {
-  var data = document.getElementById("dataChannelSend").value;
+  var data = sendArea.value;
   sendChannel.send(data);
 }
 
