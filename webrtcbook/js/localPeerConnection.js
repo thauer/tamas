@@ -62,24 +62,6 @@ callButton.onclick = function() {
     remoteVideo.src = window.URL.createObjectURL(event.stream);
   };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   console.log("%o.addStream( %o )", localPeerConnection, localStream);
   localPeerConnection.addStream(localStream);
 
