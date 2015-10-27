@@ -11,22 +11,6 @@ startButton.disabled = false;
 sendButton.disabled = true;
 closeButton.disabled = true;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 startButton.onclick = function () {
   startButton.disabled = true;
   closeButton.disabled = false;
@@ -52,24 +36,27 @@ startButton.onclick = function () {
     }
   };
 
-
-
-
-
-
   remotePeerConnection.ondatachannel = function(event) {
+    console.log("remotePeerConnection.ondatachannel( %o )", event);
     receiveChannel = event.channel;
-    receiveChannel.onopen = function() {};
+    receiveChannel.onopen = function() {
+      console.log("receiveChannel<%o>.onopen()", receiveChannel);
+    };
     receiveChannel.onmessage = function(event) {
+      console.log("receiveChannel.onmessage(%o)", event);
       receiveArea.value = event.data;
       sendArea.value = ""
+    };    
+    receiveChannel.onclose = function() {
+      console.log("receiveChannel.onclose()");
     };
-    receiveChannel.onclose = function() {};
   };
 
   sendChannel = localPeerConnection.createDataChannel("sendDataChannel", {reliable: true});
+  console.log("Created sendChannel = %o", sendChannel);
 
   sendChannel.onopen = function() {
+    console.log("sendChannel<%o>.onopen()", sendChannel)
     dataChannelSend.disabled = false;
     dataChannelSend.focus();
     dataChannelSend.placeholder = "";
@@ -77,7 +64,12 @@ startButton.onclick = function () {
     closeButton.disabled = false;    
   }
 
+  sendChannel.onmessage = function(event) {
+    console.log("sendChannel.onmessage(%o)", event);
+  }
+
   sendChannel.onclose = function() {
+    console.log("sendChannel.onclose()")
     dataChannelSend.disabled = true;
     sendButton.disabled = true;
     closeButton.disabled = true;    
@@ -96,10 +88,8 @@ startButton.onclick = function () {
         },
         function(error) {console.log('Failed to create signaling message ' + error.name); }
       );
-      console.log("returned from createAnswer()");
     } 
   );
-  console.log("returned from createOffer()");
 }
 
 sendButton.onclick = function () {
