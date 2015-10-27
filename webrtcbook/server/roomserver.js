@@ -30,7 +30,7 @@ io.sockets.on('connection', function (socket){
       socket.join(channel);
       numClients++;
       socket.broadcast.to(channel).emit('broadcast: joined', 
-        'S --> broadcast(): client ' + socket.id + ' joined channel ' + channel);
+        'client ' + socket.id + ' joined channel ' + channel);
     } else {
       console.log("Channel full!");
       socket.emit('full', channel);
