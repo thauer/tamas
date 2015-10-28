@@ -9,32 +9,35 @@ var app = http.createServer(function (req, res) {
 // Use socket.io JavaScript library for real-time web applications
 var io = require('socket.io').listen(app);
 
-var numClients = 0;
+var numClients = {};
 
 io.sockets.on('connection', function (socket){
 
-  socket.on('message', function (message) {
-    remoteLog('S --> Got message: ', message);
-    socket.broadcast.to(message.channel).emit('message', message.message);
-  });
-
   socket.on('create or join', function (channel) {
-    console.log('create or join (numClients = ' + numClients + ')');
+    console.log('create or join ' + channel + '[' + numClients[channel] + ']');
+    if(! (channel in numClients)){
+      numClients[channel] = 0;
+    }
 
-    if (numClients == 0){
+    if (numClients[channel] == 0){
       socket.join(channel);
-      numClients ++;
+      numClients[channel] ++;
       socket.emit('created', channel);
-    } else if (numClients == 1) {
+    } else if (numClients[channel] == 1) {
       io.sockets.in(channel).emit('remotePeerJoining', channel);
       socket.join(channel);
-      numClients++;
+      numClients[channel]++;
       socket.broadcast.to(channel).emit('broadcast: joined', 
         'client ' + socket.id + ' joined channel ' + channel);
     } else {
       console.log("Channel full!");
       socket.emit('full', channel);
     }
+  });
+
+  socket.on('message', function (message) {
+    remoteLog('S --> Got message: ', message);
+    socket.broadcast.to(message.channel).emit('message', message.message);
   });
 
   socket.on('response', function (response) {
@@ -45,12 +48,11 @@ io.sockets.on('connection', function (socket){
   socket.on('Bye', function(channel){
     socket.broadcast.to(channel).emit('Bye');
     socket.disconnect();
-    numClients--;
+    numClients[channel]--;
   });
 
   socket.on('Ack', function () {
     console.log('Got an Ack!');
-    // Close socket from server's side
     socket.disconnect();
   });
 

@@ -1,13 +1,9 @@
-// Get <div> placeholder element from DOM
 div = document.getElementById('scratchPad');
-// Connect to server
-var socket = io.connect('http://localhost:8181');
+var socket = io.connect('http://localhost:8181'); // Connects to server
 
-// Ask channel name from user
 channel = prompt("Enter signaling channel name:");
 if (channel !== "") {
   console.log('Trying to create or join channel: ', channel);
-  // Send 'create or join' to the server
   socket.emit('create or join', channel);
 }
 
