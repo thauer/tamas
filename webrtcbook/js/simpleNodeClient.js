@@ -1,71 +1,46 @@
-div = document.getElementById('scratchPad');
-var socket = io.connect('http://localhost:8181'); // Connects to server
+var div = document.getElementById('scratchPad');
+var msgButton = document.getElementById("msgButton");
+
+var socket = io.connect('http://10.15.15.10:8181'); // Connects to server
 
 channel = prompt("Enter signaling channel name:");
 if (channel !== "") {
-  console.log('Trying to create or join channel: ', channel);
-  socket.emit('create or join', channel);
+  console.log('Trying to join channel: ', channel);
+  socket.emit('join', channel);
+}
+
+msgButton.onclick = function() {
+  var chatMessage = prompt('Type message. Write "Bye" to quit conversation', "");
+
+  if(chatMessage == "Bye"){
+    logAndText('Sending "Bye" to server...; Going to disconnect');
+    socket.emit('Bye', channel);
+    socket.disconnect();
+  } else {
+    socket.emit('message', { channel: channel, message: chatMessage});
+  }
 }
 
 socket.on('log', function (array){
   console.log.apply(console, array);
 });
 
-socket.on('created', function (channel) {
-  stampAddStuff('Channel ' + channel + ' has been created! This peer is the initiator...');
+socket.on('joined', function (msg){
+  logAndText('Joined server: ' + msg );
 });
 
-socket.on('full', function (channel) {
-  stampAddStuff('Channel ' + channel + ' is too crowded! No entry, sorry');
-});
-
-socket.on('remotePeerJoining', function (channel){
-  stampAddStuff('Server msg: request to join ' + channel + ' (You are the initiator)', 'red' );
-});
-
-socket.on('broadcast: joined', function (msg){
-  stampAddStuff('Broadcast message from server:' + msg, 'red');
-  socket.emit('message', 
-    { channel: channel, message: prompt('Message to be sent to peer:', "")});
-});
-
-socket.on('message', function (message){
-  stampAddStuff('Got message from other peer: ' + message, 'blue');
-  socket.emit('response', 
-    { channel: channel, message: prompt('Send response to peer:', "")});
-});
-
-socket.on('response', function (response){
-  stampAddStuff( 'Got response from other peer: ' + response, 'blue');
-
-  var chatMessage = prompt('Keep on chatting. Write "Bye" to quit conversation', "");
-
-  if(chatMessage == "Bye"){
-    stampAddStuff('Sending "Bye" to server...');
-    socket.emit('Bye', channel);
-    stampAddStuff('Going to disconnect...');
-    socket.disconnect();
-  } else {
-    socket.emit('response', { channel: channel, message: chatMessage});
-  }
+socket.on('message', function (msg){
+  logAndText('Message in channel: ' + msg );
 });
 
 socket.on('Bye', function (){
-  stampAddStuff('Got "Bye" from other peer! Going to disconnect... Sending "Ack" to server');
+  logAndText('Got "Bye" from other peer! Going to disconnect... Sending "Ack" to server');
   socket.emit('Ack');
-  stampAddStuff('Going to disconnect...');
   socket.disconnect();
 });
 
-function addStuff(arg, color) {
-  if(typeof color == 'undefined') {
-    div.insertAdjacentHTML( 'beforeEnd', '<p>' + arg + '</p>');
-  } else {
-    div.insertAdjacentHTML( 'beforeEnd', '<p style="color:' + color + '">' + arg + '</p>')
-  }
-}
-
-function stampAddStuff(msg, color) {
+function logAndText(msg, color) {
   console.log(msg);
-  addStuff( 'Time: ' + (performance.now() / 1000).toFixed(3) + ' --> ' + msg, color);
+  div.insertAdjacentHTML( 'beforeEnd', 
+    '<p>' + (performance.now() / 1000).toFixed(3) + ' --> ' + msg + '</p>');
 }
