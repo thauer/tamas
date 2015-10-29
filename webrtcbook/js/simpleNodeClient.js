@@ -1,7 +1,7 @@
 var div = document.getElementById('scratchPad');
 var msgButton = document.getElementById("msgButton");
 
-var socket = io.connect('http://10.15.15.10:8181'); // Connects to server
+var socket = io.connect('http://localhost:8181');
 
 channel = prompt("Enter signaling channel name:");
 if (channel !== "") {
@@ -17,7 +17,7 @@ msgButton.onclick = function() {
     socket.emit('Bye', channel);
     socket.disconnect();
   } else {
-    socket.emit('message', { channel: channel, message: chatMessage});
+    socket.emit('message', {channel: channel, message: chatMessage});
   }
 }
 
@@ -34,7 +34,7 @@ socket.on('message', function (msg){
 });
 
 socket.on('Bye', function (){
-  logAndText('Got "Bye" from other peer! Going to disconnect... Sending "Ack" to server');
+  logAndText('Got "Bye" in channel. Disconnecting and sending "Ack" to server');
   socket.emit('Ack');
   socket.disconnect();
 });

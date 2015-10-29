@@ -8,17 +8,24 @@ var app = http.createServer(function (req, res) {
 }).listen(8181);
 var io = require('socket.io').listen(app);
 
-io.sockets.on('connection', function (socket){
+var numClients = 0;
 
-  socket.on('join', function (channel) {
-    console.log(socket.id + 'joins' + channel);
-    socket.join(channel);
-    socket.to(channel).emit('joined', socket.id + ' in ' + channel);
-  });
+io.sockets.on('connection', function (socket){
 
   socket.on('message', function (message) {
     remoteLog('S --> Got message from you: ', message);
     socket.to(message.channel).emit('message', message.message);
+  });
+
+  socket.on('join', function (channel) {    
+    console.log(socket.id + 'joins' + channel);
+    socket.join(channel);
+      socket.to(channel).emit('joins', socket.id + ' in ' + channel);
+    if( numClients == 0 ) {
+      socket.emit('created', channel)
+    } else {
+      socket.emit('joined', channel)
+    }
   });
 
   socket.on('Bye', function(channel){
