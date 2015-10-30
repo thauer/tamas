@@ -1,4 +1,4 @@
-var localStream, localPeerConnection, remotePeerConnection;
+var localStream, remoteStream, peerConnection, remotePeerConnection;
 
 var localVideo = document.getElementById("localVideo");
 var remoteVideo = document.getElementById("remoteVideo");
@@ -27,69 +27,61 @@ startButton.onclick = function() {
   );
 };
 
-var pc_config = {'iceServers': [{'url': 'stun:stun.l.google.com:19302'}]};
-var pc_constraints = {'optional': [{'DtlsSrtpKeyAgreement': true}]};
+var pc_config = {'iceServers': [{'url':'stun:stun.l.google.com:19302'}]};
+var pc_constraints = {'optional': [{'DtlsSrtpKeyAgreement':true}]};
+
+var socket = io.connect('http://localhost:8181');
 
 callButton.onclick = function() {
+
   callButton.disabled = true;
   hangupButton.disabled = false;
 
-  var servers = null;
+  peerConnection = new webkitRTCPeerConnection(pc_config, pc_constraints);
+  console.log("localPC = %o.new()", peerConnection);
 
-  localPeerConnection = new webkitRTCPeerConnection(servers);
-  console.log("localPC = %o.new()", localPeerConnection);
-  remotePeerConnection = new webkitRTCPeerConnection(servers);
-  console.log("rempotePC = %o.new()", remotePeerConnection);
+  peerConnection.addStream(localStream);
+  console.log("%o.addStream( %o )", peerConnection, localStream);
 
-  localPeerConnection.onicecandidate = function(event) {
+  peerConnection.onicecandidate = function(event) {
     if(event.candidate) {
-      remotePeerConnection.addIceCandidate(event.candidate);
       console.log("Local ICE candidate: %o %s", event, event.candidate.candidate);
-    }
+      socket.emit('message', {
+        type: 'candidate',
+        label: event.candidate.sdpMLineIndex,
+        id: event.candidate.sdpMid, 
+        candidate: event.candidate.candidate });
+    } 
   };
 
-  remotePeerConnection.onicecandidate = function(event) {
-    if(event.candidate) {
-      localPeerConnection.addIceCandidate(event.candidate);
-      console.log("Remote ICE candidate: %o %s", event, event.candidate.candidate);
-    }
-  };
+  peerConnection.onaddstream = function(event) {
+    console.log('Remote stream added');
+    attachMediaStream(remoteVideo, event.stream);
+    remoteStream = event.stream;
+  }
 
-  remotePeerConnection.onaddstream = function(event){
-    console.log("remotePeerConnection.onaddstream( %o )", event);
-    remoteVideo.src = window.URL.createObjectURL(event.stream);
-  };
-
-  console.log("%o.addStream( %o )", localPeerConnection, localStream);
-  localPeerConnection.addStream(localStream);
-
-  localPeerConnection.createOffer(
+  peerConnection.createOffer(
     function(offer) {
-      console.log("createOffer.callback( %o )", offer);
-      localPeerConnection.setLocalDescription(offer);
-      remotePeerConnection.setRemoteDescription(offer);
-      remotePeerConnection.createAnswer(
-        function(answer) {
-          console.log("createAnswer.callback( %o )", answer);
-          remotePeerConnection.setLocalDescription(answer);
-          localPeerConnection.setRemoteDescription(answer);
-        },
-        function(error){ console.log("Failed to create signaling message: " + error.name )}
-      );
-      console.log("returned from createAnswer()");
+      peerConnection.setLocalDescription(offer);
+      socket.emit('message', offer);
     }
   );
-  console.log("returned from createOffer()");
 };
 
-hangupButton.onclick = function() {
-  localPeerConnection.close();
-  remotePeerConnection.close();
-  console.log("hangup: %o, %o", localPeerConnection, remotePeerConnection);
+socket.on('message', function(message) {
+  console.log("Msg on socket: %o", message)
+});
 
-  localPeerConnection = null;
+hangupButton.onclick = function() {
+  peerConnection.close();
+  remotePeerConnection.close();
+  console.log("hangup: %o, %o", peerConnection, remotePeerConnection);
+
+  peerConnection = null;
   remotePeerConnection = null;
 
   hangupButton.disabled = true;
   callButton.disabled = false;
+
+  socket.close();
 }

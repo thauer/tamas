@@ -13,19 +13,9 @@ var numClients = 0;
 io.sockets.on('connection', function (socket){
 
   socket.on('message', function (message) {
+    socket.join('aaa');
     remoteLog('S --> Got message from you: ', message);
-    socket.to(message.channel).emit('message', message.message);
-  });
-
-  socket.on('join', function (channel) {    
-    console.log(socket.id + 'joins' + channel);
-    socket.join(channel);
-      socket.to(channel).emit('joins', socket.id + ' in ' + channel);
-    if( numClients == 0 ) {
-      socket.emit('created', channel)
-    } else {
-      socket.emit('joined', channel)
-    }
+    socket.to(message.channel).emit('message', message);
   });
 
   socket.on('Bye', function(channel){
