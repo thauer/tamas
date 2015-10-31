@@ -1,87 +1,62 @@
-var localStream, remoteStream, peerConnection, remotePeerConnection;
+// Websocket-based simple communication setup
+var socket;
 
-var localVideo = document.getElementById("localVideo");
-var remoteVideo = document.getElementById("remoteVideo");
+joinButton.onclick = function() {
+  socket = io.connect('http://10.15.15.10:8181');
+  socket.emit('join');
+};
 
-var startButton = document.getElementById("startButton");
-var callButton = document.getElementById("callButton");
-var hangupButton = document.getElementById("hangupButton");
+closeButton.onclick = function() {
+  socket.disconnect();
+};
 
-startButton.disabled = false;
-callButton.disabled = true;
-hangupButton.disabled = true;
+// WebRTC functionality uses the websocket channel
+var peerConnection;
 
 startButton.onclick = function() {
-  startButton.disabled = true;
-  console.log("%o", navigator);
-  navigator.webkitGetUserMedia({audio:true, video:true}, 
+  navigator.webkitGetUserMedia({audio:true, video:true},
     function(stream) {
-      console.log("getUserMedia.callback( %o )", stream)
       localVideo.src = URL.createObjectURL(stream);
-      localStream = stream;
-      callButton.disabled = false;
+
+      servers = {'iceServers':[{'url':'stun:stun.l.google.com:19302'}]}; // null
+      peerConnection = new webkitRTCPeerConnection(servers);
+      peerConnection.addStream(stream);
+      peerConnection.onaddstream = function(event) {
+        remoteVideo.src = URL.createObjectURL(event.stream);
+      };
+      peerConnection.onicecandidate = function(event) {
+        if(event.candidate) {
+          socket.emit('message',{ type: 'candidate',
+            sdpMLineIndex: event.candidate.sdpMLineIndex,
+            candidate: event.candidate.candidate
+          });
+        }
+      };
+
+      socket.on('message', function (msg){
+        if( msg.type === 'offer' ) {
+          peerConnection.setRemoteDescription(new RTCSessionDescription(msg));
+          peerConnection.createAnswer(function(answer){
+            peerConnection.setLocalDescription(answer);
+            socket.emit('message',answer)
+          });
+        } else if(msg.type === 'answer') {
+          peerConnection.setRemoteDescription(new RTCSessionDescription(msg));
+        } else if(msg.type === 'candidate') {
+          peerConnection.addIceCandidate(new RTCIceCandidate({
+            sdpMLineIndex: msg.sdpMLineIndex,
+            candidate: msg.candidate
+          }));
+        }
+      });
     }, 
-    function(error){ 
-      console.log("navigator.getUserMedia error: ", error); 
-    }
+    function(error){}
   );
 };
-
-var pc_config = {'iceServers': [{'url':'stun:stun.l.google.com:19302'}]};
-var pc_constraints = {'optional': [{'DtlsSrtpKeyAgreement':true}]};
-
-var socket = io.connect('http://localhost:8181');
-
-socket.on('message', function(message) {
-  console.log("Msg on socket: %o", message)
-});
 
 callButton.onclick = function() {
-
-  callButton.disabled = true;
-  hangupButton.disabled = false;
-
-  peerConnection = new webkitRTCPeerConnection(pc_config, pc_constraints);
-  console.log("localPC = %o.new()", peerConnection);
-
-  peerConnection.addStream(localStream);
-  console.log("%o.addStream( %o )", peerConnection, localStream);
-
-  peerConnection.onicecandidate = function(event) {
-    if(event.candidate) {
-      console.log("Local ICE candidate: %o %s", event, event.candidate.candidate);
-      socket.emit('message', {
-        type: 'candidate',
-        label: event.candidate.sdpMLineIndex,
-        id: event.candidate.sdpMid, 
-        candidate: event.candidate.candidate });
-    } 
-  };
-
-  peerConnection.onaddstream = function(event) {
-    console.log('Remote stream added');
-    attachMediaStream(remoteVideo, event.stream);
-    remoteStream = event.stream;
-  }
-
-  peerConnection.createOffer(
-    function(offer) {
-      peerConnection.setLocalDescription(offer);
-      socket.emit('message', offer);
-    }
-  );
-};
-
-hangupButton.onclick = function() {
-  peerConnection.close();
-  remotePeerConnection.close();
-  console.log("hangup: %o, %o", peerConnection, remotePeerConnection);
-
-  peerConnection = null;
-  remotePeerConnection = null;
-
-  hangupButton.disabled = true;
-  callButton.disabled = false;
-
-  socket.close();
+  peerConnection.createOffer(function(offer) {
+    peerConnection.setLocalDescription(offer);
+    socket.emit('message',offer);
+  });
 }
