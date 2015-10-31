@@ -1,0 +1,583 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"add_tag",
+				"add_tag('pool"
+			],
+			[
+				"poo",
+				"poolIsFilled"
+			],
+			[
+				"AWS",
+				"AWS_ACCESS_KEY_ID"
+			],
+			[
+				"getA",
+				"getAwsInstancesFromPool"
+			],
+			[
+				"instances",
+				"instances"
+			],
+			[
+				"getAw",
+				"getAwsInstanceFromPool"
+			],
+			[
+				"assert",
+				"assertTrue"
+			],
+			[
+				"ec",
+				"ec2_keyname"
+			],
+			[
+				"__",
+				"__init__"
+			],
+			[
+				"start",
+				"start_new_thread"
+			],
+			[
+				"Br",
+				"BrowserVersion"
+			],
+			[
+				"with",
+				"with_items"
+			],
+			[
+				"bic",
+				"bicpl-1"
+			],
+			[
+				"wih",
+				"with_item"
+			],
+			[
+				"s3re",
+				"s3responseFreeSurfer"
+			],
+			[
+				"inst",
+				"instanceC"
+			],
+			[
+				"ins",
+				"instanceE"
+			],
+			[
+				"cafe",
+				"caffe-master"
+			],
+			[
+				"caffe",
+				"caffe-parent"
+			],
+			[
+				"ass",
+				"assertPlaybookResponds"
+			],
+			[
+				"b",
+				"bin"
+			],
+			[
+				"TEST",
+				"TEST_REF"
+			],
+			[
+				"risk",
+				"riskAnalysisFile"
+			],
+			[
+				"Risk",
+				"RiskAnalysis	(Traceability Matrix.md)"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/Markdown Preview/Markdown.sublime-build",
+					""
+				],
+				[
+					"Packages/SublimeREPL/sublimerepl_build_system_hack.sublime-build",
+					""
+				]
+			],
+			[
+				"Packages/Markdown Preview/Markdown.sublime-build",
+				""
+			]
+		],
+		[
+			[
+				[
+					"Packages/Python/Python.sublime-build",
+					""
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					"Syntax Check"
+				]
+			],
+			[
+				"Packages/Python/Python.sublime-build",
+				""
+			]
+		],
+		[
+			[
+				[
+					"Packages/Python/Python.sublime-build",
+					""
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					"Syntax Check"
+				],
+				[
+					"Packages/SublimeREPL/sublimerepl_build_system_hack.sublime-build",
+					""
+				]
+			],
+			[
+				"Packages/Python/Python.sublime-build",
+				""
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 264.0,
+		"last_filter": "upd",
+		"selected_items":
+		[
+			[
+				"upd",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"upgra",
+				"Package Control: Upgrade Package"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"Package Control: inst",
+				"Package Control: Install Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 234.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = 'eb2297e1a458f27d836c04bb0cbaf282' + 'd0e7a3098092775ccb37ca9d6b2e4b7d'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/thauer/tamasrepo/webrtcbook"
+	],
+	"file_history":
+	[
+		"/home/thauer/tamasrepo/webrtcbook/webrtcbook.sublime-project",
+		"/home/thauer/tamasrepo/webrtcbook/js/simpleNodeClient.js",
+		"/home/thauer/tamasrepo/webrtcbook/server/chatserver.js",
+		"/home/thauer/tamasrepo/webrtcbook/ex3-1.remote.html",
+		"/home/thauer/tamasrepo/webrtcbook/js/remotePeerConnection.js",
+		"/home/thauer/hva-operation/configuration/appmri-hva/roles/appserver/tasks/tomcat7.yml",
+		"/home/thauer/hva-operation/configuration/README.md",
+		"/home/thauer/hva-operation/configuration/ec2/README.md",
+		"/home/thauer/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
+		"/home/thauer/.config/sublime-text-3/Packages/Default/Default (Linux).sublime-keymap",
+		"/home/thauer/appmri-vip/deployment/roles/webserver/defaults/main.yml",
+		"/home/thauer/appmri-vip/deployment/roles/webserver/tasks/apache2.yml",
+		"/home/thauer/appmri-vip/deployment/roles/webserver/tasks/ssl.yml",
+		"/home/thauer/tamasrepo/webrtcbook/server/.gitignore",
+		"/home/thauer/appmri-vip/deployment/test/pool.py",
+		"/home/thauer/tamasrepo/webrtcbook/ex4-1.html",
+		"/home/thauer/tamasrepo/webrtcbook/server/roomserver.js",
+		"/home/thauer/appmri-vip/.gitignore",
+		"/home/thauer/tamasrepo/webrtcbook/websocket/server.js",
+		"/home/thauer/appmri-vip/deployment/test/test_deployment.py",
+		"/home/thauer/appmri-vip/deployment/README.md",
+		"/home/thauer/appmri-vip/deployment/roles/webserver/tasks/webapp.yml",
+		"/home/thauer/appmri-vip/deployment/group_vars/all/vars_file.yml",
+		"/home/thauer/appmri-vip/deployment/appmri.yml",
+		"/home/thauer/tamasrepo/webrtcbook/socket.io.js",
+		"/home/thauer/appmri-vip/deployment/roles/fileserver/tasks/main.yml",
+		"/home/thauer/appmri-vip/deployment/roles/fileserver/defaults/main.yml",
+		"/home/thauer/appmri-vip/deployment/roles/dbserver/defaults/main.yml",
+		"/home/thauer/appmri-vip/deployment/roles/freesurfer/tasks/main.yml",
+		"/home/thauer/appmri-vip/deployment/roles/bicmni/tasks/main.yml",
+		"/home/thauer/appmri-vip/deployment/roles/webserver/files/.gitignore",
+		"/home/thauer/appmri-vip/deployment/roles/webserver/tasks/tomcat7.yml",
+		"/home/thauer/appmri-vip/docs/manuals/System Administrator Manual/IQ_form_manual.md",
+		"/home/thauer/hva-operation/configuration/appmri-hva/site.yml",
+		"/home/thauer/appmri-vip/deployment/roles/webserver/files/pipeline.sh",
+		"/home/thauer/appmri-vip/deployment/roles/webserver/files/pipelineRun.sh",
+		"/home/thauer/hva-operation/configuration/appmri-hva/roles/fileserver/tasks/main.yml",
+		"/home/thauer/appmri-vip/deployment/roles/webserver/files/createslice.sh",
+		"/home/thauer/appmri-vip/deployment/inventory",
+		"/home/thauer/appmri-vip/deployment/tmpplaybook.yml",
+		"/home/thauer/appmri-vip/deployment/roles/webserver/files/tomcat_monitor.sh",
+		"/home/thauer/appmri-vip/deployment/roles/webserver/tasks/main.yml",
+		"/home/thauer/appmri-vip/deployment/roles/webserver/files/appmrivip.conf",
+		"/home/thauer/appmri-vip/deployment/roles/appserver/defaults/main.yml",
+		"/home/thauer/appmri-vip/deployment/roles/appserver/tasks/tomcat7.yml",
+		"/home/thauer/appmri-vip/docs/traceability/TraceabilityMatrix.yml",
+		"/home/thauer/appmri-vip/deployment/roles/appserver/tasks/main.yml",
+		"/home/thauer/appmri-vip/deployment/roles/appserver/files/tomcat_monitor.sh",
+		"/home/thauer/appmri-vip/deployment/roles/appserver/meta/main.yml",
+		"/home/thauer/appmri-vip/src/application/grails-app/services/ch/prodema/appmrivip/web/InputConformanceVerificationService.groovy",
+		"/home/thauer/appmri-vip/deployment/roles/gridexec/defaults/main.yml",
+		"/home/thauer/appmri-vip/deployment/test/logging.cnf",
+		"/home/thauer/appmri-vip/deployment/roles/gridmaster/defaults/main.yml",
+		"/home/thauer/tamasrepo/webrtcbook/js/localPeerConnection.js",
+		"/home/thauer/tamasrepo/webrtcbook/js/dataChannel.js",
+		"/home/thauer/hva-operation/configuration/appmri-hva/group_vars/all/vars_file.yml",
+		"/home/thauer/appmri-vip/deployment/roles/webserver/templates/appmri",
+		"/home/thauer/hva-operation/configuration/appmri-hva/roles/webserver/tasks/apache2.yml",
+		"/home/thauer/appmri-vip/docs/requirements/Product Requirements Specification.md",
+		"/home/thauer/appmri-vip/deployment/test/README.md",
+		"/home/thauer/appmri-vip/deployment/roles/bicmni/defaults/main.yml",
+		"/home/thauer/hva-operation/configuration/appmri-hva/roles/gridexec/tasks/bic_mni.yml",
+		"/home/thauer/tamasrepo/webrtcbook/ex2-3.html",
+		"/home/thauer/tamasrepo/webrtcbook/ex3-1.html",
+		"/home/thauer/hva-operation/configuration/appmri-hva/roles/dbserver/tasks/mysql_install.yml",
+		"/home/thauer/hva-operation/configuration/appmri-hva/roles/monitorserver/templates/objects/contacts.cfg",
+		"/home/thauer/hva-operation/configuration/appmri-hva/roles/backupserver/templates/appmri_backup.sh",
+		"/home/thauer/hva-operation/configuration/appmri-hva/roles/backupserver/tasks/main.yml",
+		"/home/thauer/hva-operation/configuration/appmri-hva/roles/backupserver/vars/main.yml.0",
+		"/home/thauer/hva-operation/configuration/appmri-hva/roles/backupserver/vars/main.yml",
+		"/home/thauer/hva-operation/configuration/appmri-hva/roles/backupserver/templates/s3cfg",
+		"/home/thauer/hva-operation/configuration/appmri-hva/roles/monitorednode/tasks/main.yml",
+		"/home/thauer/hva-operation/configuration/appmri-hva/roles/monitorserver/tasks/main.yml",
+		"/home/thauer/hva-operation/configuration/appmri-hva/roles/webserver/templates/appmri",
+		"/home/thauer/hva-operation/configuration/appmri-hva/inventory.zurich",
+		"/home/thauer/hva-operation/configuration/appmri-hva/appmri.yml",
+		"/home/thauer/appmri-vip/ext/python/test/test_python.py",
+		"/home/thauer/hva-operation/configuration/appmri-hva/roles/fileserver/tasks/freesurfer.yml",
+		"/home/thauer/appmri-vip/docs/manuals/System Administrator Manual/OQ_form_manual.md",
+		"/home/thauer/appmri-vip/docs/manuals/.gitignore",
+		"/home/thauer/hva-operation/configuration/appmri-hva/roles/webserver/tasks/ssl.yml",
+		"/home/thauer/hva-operation/configuration/appmri-hva/roles/webserver/tasks/main.yml",
+		"/home/thauer/hva-operation/configuration/appmri-hva/roles/appserver/tasks/main.yml",
+		"/home/thauer/hva-operation/configuration/appmri-hva/roles/appserver/meta/main.yml",
+		"/home/thauer/hva-operation/configuration/appmri-hva/roles/gridexec/tasks/main.yml",
+		"/home/thauer/hva-operation/configuration/appmri-hva/roles/fileserver/files/pipeline.sh",
+		"/home/thauer/hva-operation/configuration/appmri-hva/roles/fileserver/files/pipelineRun.sh",
+		"/home/thauer/hva-operation/configuration/appmri-hva/roles/dbserver/tasks/main.yml",
+		"/home/thauer/hva-operation/configuration/appmri-hva/roles/dbserver/tasks/mysql_configure.yml",
+		"/home/thauer/flashmob/screenemul/barcode.py",
+		"/home/thauer/flashmob/screenemul/sample.yml",
+		"/home/thauer/flashmob/screenemul/code128.py",
+		"/home/thauer/flashmob/screenemul/__init__.py",
+		"/home/thauer/tamasrepo/squash/mailtest.py",
+		"/home/thauer/tamasrepo/flashmob/screenemul/videotest.py",
+		"/home/thauer/tamasrepo/flashmob/screenemul/sample.yml",
+		"/home/thauer/tamasrepo/flashmob/sdl/testconfig.py",
+		"/home/thauer/tamasrepo/flashmob/screenemul/barcode.py",
+		"/home/thauer/tamasrepo/flashmob/sdl/config.yml",
+		"/home/thauer/tamasrepo/flashmob/sdl/barcode.py",
+		"/home/thauer/appmri-vip/docs/.gitignore",
+		"/home/thauer/appmri-vip/src/application/application.properties",
+		"/home/thauer/appmri-vip/src/application/grails-app/conf/DataSource.groovy",
+		"/home/thauer/appmri-vip/docs/test/Test Suite.md",
+		"/home/thauer/tamasrepo/my_rtc_project/apps/rtcserver/rebar.config",
+		"/home/thauer/appmri-vip/ext/iText/test/Test Suite.iText.md",
+		"/home/thauer/appmri-vip/src/application/grails-app/services/ch/prodema/appmrivip/web/PdfReportService.groovy",
+		"/home/thauer/tamasrepo/my_rtc_project/apps/rtcserver/src/handler_websocket.erl",
+		"/home/thauer/appmri-vip/ext/iText/test/test5.groovy",
+		"/home/thauer/appmri-vip/ext/iText/test/test.groovy",
+		"/home/thauer/grailstest/testgeb.groovy",
+		"/home/thauer/grailstest/GebConfig.groovy",
+		"/home/thauer/grailstest/Log.md",
+		"/home/thauer/grailstest/Log.html",
+		"/home/thauer/grailstest/testcase2.html",
+		"/home/thauer/appmri-vip/src/application/test/functional/GebConfig.groovy",
+		"/home/thauer/grailstest/testcase.html",
+		"/home/thauer/grailstest/doc.css",
+		"/home/thauer/grailstest/bookstore/grails-app/conf/BuildConfig.groovy",
+		"/home/thauer/grailstest/bookstore/test/functional/IndexSpec.groovy",
+		"/home/thauer/appmri-vip/docs/requirements/prs.html",
+		"/home/thauer/appmri-vip/docs/requirements/prs.md",
+		"/home/thauer/appmri-vip/docs/requirements/appmri-doc.css",
+		"/home/thauer/appmri-vip/docs/requirements/test.html",
+		"/home/thauer/appmri-vip/ext/grails/2.4.5/test/grails-test/test/functional/FileDownloadSpec.groovy",
+		"/home/thauer/appmri-vip/ext/grails/2.4.5/test/grails-test/grails-app/controllers/grails/test/PersistenceController.groovy",
+		"/home/thauer/appmri-vip/run_tests.sh",
+		"/home/thauer/appmri-vip/ext/grails/2.4.5/test/grails-test/grails-app/views/layouts/main.gsp"
+	],
+	"find":
+	{
+		"height": 22.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"blinker",
+			"json",
+			"blinker",
+			"Blinker",
+			"blinker",
+			"Blinker",
+			"vip",
+			"code",
+			"testUrl",
+			"suite",
+			"object=",
+			"s3responseFreeSurfer",
+			"appmri_s3_download_bucket",
+			"appmri_freesurfer_home",
+			"DEBUG",
+			"PATH",
+			"INFO",
+			"DeploymentTest",
+			"debug",
+			"gandi.",
+			"zoneid",
+			"apikey",
+			"772488",
+			"caffe-dir",
+			"caffe-parent",
+			"/tmp/caffe-master",
+			"DeploymentTest.logger",
+			"logging",
+			"name",
+			"Name",
+			"\\n",
+			"risk",
+			"RISK",
+			"risk",
+			"HAZARD",
+			"CAUSE",
+			"RiskAnalysis.yml"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"assert"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 21.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 169.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.markdown":
+	{
+		"height": 100.0
+	},
+	"pinned_build_system": "",
+	"project": ".webrtcbook.sublime-project",
+	"replace":
+	{
+		"height": 40.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"bicmni",
+				"appmri-vip/deployment/roles/bicmni/tasks/main.yml"
+			],
+			[
+				"bicm",
+				"hva-operation/configuration/appmri-hva/roles/gridexec/tasks/bic_mni.yml"
+			],
+			[
+				"applicationres",
+				"appmri-vip/src/application/application.properties"
+			],
+			[
+				"pdfreport",
+				"appmri-vip/src/application/grails-app/services/ch/prodema/appmrivip/web/PdfReportService.groovy"
+			],
+			[
+				"datasource",
+				"appmri-vip/src/application/grails-app/conf/DataSource.groovy"
+			],
+			[
+				"produ",
+				"appmri-vip/docs/requirements/Product Requirements Specification.md"
+			],
+			[
+				"gebconfig",
+				"appmri-vip/src/application/test/functional/GebConfig.groovy"
+			],
+			[
+				"appmricss",
+				"appmri-vip/docs/common/appmri-doc.css"
+			],
+			[
+				"prs.md",
+				"appmri-vip/docs/requirements/Product Requirements Specification.md"
+			],
+			[
+				"gebcon",
+				"appmri-vip/ext/grails/2.4.5/test/grails-test/test/functional/GebConfig.groovy"
+			],
+			[
+				"buildconfi",
+				"grailstest/bookstore/grails-app/conf/BuildConfig.groovy"
+			],
+			[
+				"indexspe",
+				"grailstest/bookstore/test/functional/IndexSpec.groovy"
+			],
+			[
+				"prs",
+				"appmri-vip/docs/requirements/prs.md"
+			],
+			[
+				"download",
+				"appmri-vip/ext/grails/2.4.5/test/grails-test/test/functional/FileDownloadSpec.groovy"
+			],
+			[
+				"trace",
+				"appmri-vip/docs/traceability/TraceabilityMatrix.yml"
+			],
+			[
+				"trac",
+				"appmri-vip/docs/traceability/TraceabilityMatrix.yml"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 287.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

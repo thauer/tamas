@@ -13,6 +13,7 @@ var numClients = 0;
 io.sockets.on('connection', function (socket){
 
   socket.on('message', function (message) {
+    console.log('message --- ', message);
     socket.join('aaa');
     remoteLog('S --> Got message from you: ', message);
     socket.to(message.channel).emit('message', message);

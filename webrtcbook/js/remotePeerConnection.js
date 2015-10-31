@@ -32,6 +32,10 @@ var pc_constraints = {'optional': [{'DtlsSrtpKeyAgreement':true}]};
 
 var socket = io.connect('http://localhost:8181');
 
+socket.on('message', function(message) {
+  console.log("Msg on socket: %o", message)
+});
+
 callButton.onclick = function() {
 
   callButton.disabled = true;
@@ -67,10 +71,6 @@ callButton.onclick = function() {
     }
   );
 };
-
-socket.on('message', function(message) {
-  console.log("Msg on socket: %o", message)
-});
 
 hangupButton.onclick = function() {
   peerConnection.close();
