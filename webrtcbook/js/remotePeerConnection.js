@@ -2,7 +2,7 @@
 var socket;
 
 joinButton.onclick = function() {
-  socket = io.connect('http://10.15.15.10:8181');
+  socket = io.connect('http://localhost:8181');
   socket.emit('join');
 };
 
@@ -22,9 +22,11 @@ startButton.onclick = function() {
       peerConnection = new webkitRTCPeerConnection(servers);
       peerConnection.addStream(stream);
       peerConnection.onaddstream = function(event) {
+        console.log(Date.now() + ' onaddstream(%o)', event);
         remoteVideo.src = URL.createObjectURL(event.stream);
       };
       peerConnection.onicecandidate = function(event) {
+        console.log(Date.now() + ' onicecandidate(%o)', event);
         if(event.candidate) {
           socket.emit('message',{ type: 'candidate',
             sdpMLineIndex: event.candidate.sdpMLineIndex,
@@ -34,9 +36,11 @@ startButton.onclick = function() {
       };
 
       socket.on('message', function (msg){
+        console.log(Date.now() + ' message(%o)', msg);
         if( msg.type === 'offer' ) {
           peerConnection.setRemoteDescription(new RTCSessionDescription(msg));
           peerConnection.createAnswer(function(answer){
+            console.log(Date.now() + ' createAnswer_callback(%o)', answer);
             peerConnection.setLocalDescription(answer);
             socket.emit('message',answer)
           });
@@ -56,6 +60,7 @@ startButton.onclick = function() {
 
 callButton.onclick = function() {
   peerConnection.createOffer(function(offer) {
+    console.log(Date.now() + ' createOffer_callback(%o)', offer);
     peerConnection.setLocalDescription(offer);
     socket.emit('message',offer);
   });
