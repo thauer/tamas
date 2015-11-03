@@ -36,9 +36,10 @@ startButton.onclick = function() {
       };
 
       socket.on('message', function (msg){
-        console.log(Date.now() + ' message(%o)', msg);
+        console.log(Date.now() + ' message(%o [%s])', msg, msg.type);
         if( msg.type === 'offer' ) {
           peerConnection.setRemoteDescription(new RTCSessionDescription(msg));
+          console.log(Date.now() + ' createAnswer()');
           peerConnection.createAnswer(function(answer){
             console.log(Date.now() + ' createAnswer_callback(%o)', answer);
             peerConnection.setLocalDescription(answer);
