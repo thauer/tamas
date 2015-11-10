@@ -1,0 +1,42 @@
+Make sure node is installed: (https://github.com/nodesource/distributions)
+```
+$ node -v
+v5.0.0
+$ npm -v
+3.3.6
+```
+
+Also that `node-static` is installed globally:
+```
+$ npm -g ls node-static
+/usr/lib
+└── node-static@0.7.7 
+```
+
+We'll be serving from the www directory
+```
+thauer@babar www$ static -a 0.0.0.0 -H '{"Cache-Control": "no-cache, must-revalidate"}'
+serving "." at http://0.0.0.0:8080
+9:49:15 [200]: /
+```
+
+We'll use a websocket server to facilitate the signaling channel. To that end, let's install `ws` (https://github.com/websockets/ws) which also provides a command-line client out of the box.
+
+```
+thauer@babar www$ npm -g ls ws wscat
+/usr/lib
+├── ws@0.8.0 
+└─┬ wscat@1.0.1 
+  └── ws@0.8.0 
+```
+
+Test the wscat client first:
+```
+thauer@babar www$ wscat -c ws://echo.websocket.org
+connected (press CTRL+C to quit)
+> Hello, world!
+< Hello, world!
+> Bye
+< Bye
+> 
+```

@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html>
+  <head><title>Tamás Chat/title></head>
+  <body>
+    <div>
+      <button id="joinButton">Join</button>
+      <button id="closeButton">Hang Up</button>
+    </div>
+    <video id="localVideo" autoplay></video>
+    <video id="remoteVideo" autoplay></video>
+    <div>
+      <button id="startButton">Start</button>
+      <button id="callButton">Call</button>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/remotePeerConnection.js"></script>
+  </body>
+</html>
