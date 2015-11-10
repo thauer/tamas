@@ -2,8 +2,14 @@
 	"folders":
 	[
 		{
-			"path": ".",
-      "file_exclude_patterns": [".*"]
+			"file_exclude_patterns":
+			[
+				".*"
+			],
+			"path": "."
+		},
+		{
+			"path": "/home/thauer/tamasrepo/tchat"
 		}
 	]
 }

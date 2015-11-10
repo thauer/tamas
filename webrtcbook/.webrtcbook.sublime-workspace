@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"createO",
+				"createObjectURL"
+			],
+			[
 				"add_tag",
 				"add_tag('pool"
 			],
@@ -103,6 +107,22 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "/home/thauer/tamasrepo/tchat/server/chatserver.js",
+			"settings":
+			{
+				"buffer_size": 319,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/thauer/tamasrepo/tchat/README.md",
+			"settings":
+			{
+				"buffer_size": 878,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -163,10 +183,18 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 264.0,
-		"last_filter": "upd",
+		"height": 96.0,
+		"last_filter": "install",
 		"selected_items":
 		[
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
 			[
 				"upd",
 				"Package Control: Upgrade/Overwrite All Packages"
@@ -190,13 +218,9 @@
 			[
 				"inst",
 				"Package Control: Install Package"
-			],
-			[
-				"instal",
-				"Package Control: Install Package"
 			]
 		],
-		"width": 449.0
+		"width": 575.0
 	},
 	"console":
 	{
@@ -217,15 +241,20 @@
 	},
 	"expanded_folders":
 	[
-		"/home/thauer/tamasrepo/webrtcbook"
+		"/home/thauer/tamasrepo/webrtcbook",
+		"/home/thauer/tamasrepo/tchat",
+		"/home/thauer/tamasrepo/tchat/server"
 	],
 	"file_history":
 	[
-		"/home/thauer/tamasrepo/webrtcbook/webrtcbook.sublime-project",
-		"/home/thauer/tamasrepo/webrtcbook/js/simpleNodeClient.js",
-		"/home/thauer/tamasrepo/webrtcbook/server/chatserver.js",
+		"/home/thauer/tamasrepo/tchat/README.md",
 		"/home/thauer/tamasrepo/webrtcbook/ex3-1.remote.html",
 		"/home/thauer/tamasrepo/webrtcbook/js/remotePeerConnection.js",
+		"/home/thauer/tamasrepo/webrtcbook/Learning WebRTC/index.js",
+		"/usr/lib/node_modules/wscat/node_modules/ws/lib/WebSocket.js",
+		"/home/thauer/tamasrepo/webrtcbook/server/chatserver.js",
+		"/home/thauer/tamasrepo/webrtcbook/js/simpleNodeClient.js",
+		"/home/thauer/tamasrepo/webrtcbook/webrtcbook.sublime-project",
 		"/home/thauer/hva-operation/configuration/appmri-hva/roles/appserver/tasks/tomcat7.yml",
 		"/home/thauer/hva-operation/configuration/README.md",
 		"/home/thauer/hva-operation/configuration/ec2/README.md",
@@ -345,14 +374,11 @@
 		"/home/thauer/appmri-vip/docs/requirements/prs.md",
 		"/home/thauer/appmri-vip/docs/requirements/appmri-doc.css",
 		"/home/thauer/appmri-vip/docs/requirements/test.html",
-		"/home/thauer/appmri-vip/ext/grails/2.4.5/test/grails-test/test/functional/FileDownloadSpec.groovy",
-		"/home/thauer/appmri-vip/ext/grails/2.4.5/test/grails-test/grails-app/controllers/grails/test/PersistenceController.groovy",
-		"/home/thauer/appmri-vip/run_tests.sh",
-		"/home/thauer/appmri-vip/ext/grails/2.4.5/test/grails-test/grails-app/views/layouts/main.gsp"
+		"/home/thauer/appmri-vip/ext/grails/2.4.5/test/grails-test/test/functional/FileDownloadSpec.groovy"
 	],
 	"find":
 	{
-		"height": 22.0
+		"height": 35.0
 	},
 	"find_in_files":
 	{
@@ -366,6 +392,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"protocolVersion",
+			"peerConnnection",
+			"pc",
 			"blinker",
 			"json",
 			"blinker",
@@ -421,14 +450,71 @@
 	"groups":
 	[
 		{
+			"selected": 1,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "/home/thauer/tamasrepo/tchat/server/chatserver.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 319,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/home/thauer/tamasrepo/tchat/README.md",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 878,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								166,
+								166
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/MarkdownEditing/Markdown.tmLanguage"
+						},
+						"translation.x": -0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
 			]
 		}
 	],
 	"incremental_find":
 	{
-		"height": 21.0
+		"height": 23.0
 	},
 	"input":
 	{
@@ -473,7 +559,7 @@
 	"project": ".webrtcbook.sublime-project",
 	"replace":
 	{
-		"height": 40.0
+		"height": 42.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -575,7 +661,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 287.0,
+	"side_bar_width": 252.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

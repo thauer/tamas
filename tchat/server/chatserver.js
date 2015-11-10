@@ -6,8 +6,10 @@ var WebSocketServer = require('ws').Server
 wss.on('connection', function(ws) {
   ws.on('message', function(message) {
     console.log('received: %s', message);
-  });
-  wss.clients.forEach(function each(client) {
-    client.send('Broadcast');
+    wss.clients.forEach(function(client) {
+      if(ws!==client) {
+        client.send(message);
+      }
+    });
   });
 });
