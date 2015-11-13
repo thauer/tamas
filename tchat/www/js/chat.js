@@ -37,30 +37,30 @@ function newPeerConnection() {
   return peerConnection;
 }
 
-ws.onmessage = function (msg) {
-  data = JSON.parse(msg.data);
-  console.log(Date.now() + ' message(%o [%s])', data, data.type);
-  if( data.type === 'pair' ) {
+ws.onmessage = function (messageEvent) {
+  message = JSON.parse(messageEvent.data);
+  console.log(Date.now() + ' message(%o [%s])', message, message.type);
+  if( message.type === 'pair' ) {
     peerConnection = newPeerConnection();
     peerConnection.createOffer(function(offer) {
       console.log(Date.now() + ' createOffer_callback(%o)', offer);
       peerConnection.setLocalDescription(offer);
       ws.send(JSON.stringify(offer));
     });
-  } else if( data.type === 'offer' ) {
+  } else if( message.type === 'offer' ) {
     peerConnection = newPeerConnection();
-    peerConnection.setRemoteDescription(new RTCSessionDescription(data));
+    peerConnection.setRemoteDescription(new RTCSessionDescription(message));
     peerConnection.createAnswer(function(answer){
       console.log(Date.now() + ' createAnswer_callback(%o)', answer);
       peerConnection.setLocalDescription(answer);
       ws.send(JSON.stringify(answer))
     });
-  } else if(data.type === 'answer') {
-    peerConnection.setRemoteDescription(new RTCSessionDescription(data));
-  } else if(data.type === 'candidate') {
+  } else if(message.type === 'answer') {
+    peerConnection.setRemoteDescription(new RTCSessionDescription(message));
+  } else if(message.type === 'candidate') {
     peerConnection.addIceCandidate(new RTCIceCandidate({
-      sdpMLineIndex: data.sdpMLineIndex,
-      candidate: data.candidate
+      sdpMLineIndex: message.sdpMLineIndex,
+      candidate: message.candidate
     }));
   }
 };

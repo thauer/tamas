@@ -40,3 +40,26 @@ connected (press CTRL+C to quit)
 < Bye
 > 
 ```
+
+As far as the chat server, we want the following functionality:
+
+* A client connects. The join notification is broadcast to all clients.
+* A client sends a message to one of the other client
+    - offer
+    - answer
+    - ICECandidate
+
+In the browser, we use the WebSocket class (https://developer.mozilla.org/en-US/docs/Web/API/WebSocket). 
+
+```
+class WebSocket {
+    void close(in optional unsigned long code, in optional DOMString reason);
+    void send(in DOMString data);
+
+    onmessage = function HandleEvent(MessageEvent event)
+}
+
+class MessageEvent extends Event {
+    data: DOMString | Blob | ArrayBuffer  
+}
+```
