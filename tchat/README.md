@@ -1,12 +1,17 @@
+# tchat
+
+## Node
 Make sure node is installed: (https://github.com/nodesource/distributions)
 ```
 $ node -v
-v5.0.0
+v5.1.0
 $ npm -v
-3.3.6
+3.3.12
 ```
 
-Also that `node-static` is installed globally:
+## node-static and static webserver
+
+`node-static` is installed globally:
 ```
 $ npm -g ls node-static
 /usr/lib
@@ -19,6 +24,8 @@ thauer@babar www$ static -a 0.0.0.0 -H '{"Cache-Control": "no-cache, must-revali
 serving "." at http://0.0.0.0:8080
 9:49:15 [200]: /
 ```
+
+## websocket protocol with `ws` and `wscat`
 
 We'll use a websocket server to facilitate the signaling channel. To that end, let's install `ws` (https://github.com/websockets/ws) which also provides a command-line client out of the box.
 
@@ -40,6 +47,8 @@ connected (press CTRL+C to quit)
 < Bye
 > 
 ```
+
+## The chat server
 
 As far as the chat server, we want the following functionality:
 

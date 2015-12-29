@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"peer",
+				"peerConnection"
+			],
+			[
+				"sdp",
+				"sdpMid"
+			],
+			[
 				"createO",
 				"createObjectURL"
 			],
@@ -107,22 +115,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "/home/thauer/tamasrepo/tchat/server/chatserver.js",
-			"settings":
-			{
-				"buffer_size": 319,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/home/thauer/tamasrepo/tchat/README.md",
-			"settings":
-			{
-				"buffer_size": 878,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -242,14 +234,24 @@
 	"expanded_folders":
 	[
 		"/home/thauer/tamasrepo/webrtcbook",
+		"/home/thauer/tamasrepo/webrtcbook/js",
+		"/home/thauer/tamasrepo/webrtcbook/server",
 		"/home/thauer/tamasrepo/tchat",
-		"/home/thauer/tamasrepo/tchat/server"
+		"/home/thauer/tamasrepo/tchat/server",
+		"/home/thauer/tamasrepo/tchat/www",
+		"/home/thauer/tamasrepo/tchat/www/js"
 	],
 	"file_history":
 	[
 		"/home/thauer/tamasrepo/tchat/README.md",
-		"/home/thauer/tamasrepo/webrtcbook/ex3-1.remote.html",
+		"/home/thauer/tamasrepo/tchat/www/index.html",
+		"/home/thauer/tamasrepo/tchat/www/js/webrtc.js",
+		"/home/thauer/tamasrepo/tchat/server/chatserver.js",
+		"/home/thauer/tamasrepo/tchat/www/js/chat.js",
+		"/home/thauer/tamasrepo/tchat/www/js/test.js",
+		"/home/thauer/tamasrepo/tchat/www/test.html",
 		"/home/thauer/tamasrepo/webrtcbook/js/remotePeerConnection.js",
+		"/home/thauer/tamasrepo/webrtcbook/ex3-1.remote.html",
 		"/home/thauer/tamasrepo/webrtcbook/Learning WebRTC/index.js",
 		"/usr/lib/node_modules/wscat/node_modules/ws/lib/WebSocket.js",
 		"/home/thauer/tamasrepo/webrtcbook/server/chatserver.js",
@@ -368,13 +370,7 @@
 		"/home/thauer/appmri-vip/src/application/test/functional/GebConfig.groovy",
 		"/home/thauer/grailstest/testcase.html",
 		"/home/thauer/grailstest/doc.css",
-		"/home/thauer/grailstest/bookstore/grails-app/conf/BuildConfig.groovy",
-		"/home/thauer/grailstest/bookstore/test/functional/IndexSpec.groovy",
-		"/home/thauer/appmri-vip/docs/requirements/prs.html",
-		"/home/thauer/appmri-vip/docs/requirements/prs.md",
-		"/home/thauer/appmri-vip/docs/requirements/appmri-doc.css",
-		"/home/thauer/appmri-vip/docs/requirements/test.html",
-		"/home/thauer/appmri-vip/ext/grails/2.4.5/test/grails-test/test/functional/FileDownloadSpec.groovy"
+		"/home/thauer/grailstest/bookstore/grails-app/conf/BuildConfig.groovy"
 	],
 	"find":
 	{
@@ -392,6 +388,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"ws",
 			"protocolVersion",
 			"peerConnnection",
 			"pc",
@@ -450,65 +447,8 @@
 	"groups":
 	[
 		{
-			"selected": 1,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "/home/thauer/tamasrepo/tchat/server/chatserver.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 319,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "/home/thauer/tamasrepo/tchat/README.md",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 878,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								166,
-								166
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/MarkdownEditing/Markdown.tmLanguage"
-						},
-						"translation.x": -0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				}
 			]
 		}
 	],
