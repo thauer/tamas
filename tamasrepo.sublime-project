@@ -2,10 +2,7 @@
 	"folders":
 	[
 		{
-			"path": "ext"
-		},
-		{
-			"path": "bencequota"
+			"path": "."
 		}
 	]
 }
